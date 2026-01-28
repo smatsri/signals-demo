@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { Todo } from './models/todo.model';
+import { TodosService } from './services/todos.service';
 
 @Component({
   selector: 'app-todos-page',
@@ -14,13 +14,11 @@ import { Todo } from './models/todo.model';
 export class TodosPage {
   readonly title = 'Signals Todo List';
 
-  private nextId = 1;
+  private readonly todosService = inject(TodosService);
 
-  readonly todos = signal<Todo[]>([]);
+  readonly todos = this.todosService.todos;
   readonly newTodoText = signal('');
-  readonly remainingCount = computed(
-    () => this.todos().filter((todo) => !todo.completed).length
-  );
+  readonly remainingCount = this.todosService.remainingCount;
 
   addTodo(): void {
     const text = this.newTodoText().trim();
@@ -28,13 +26,7 @@ export class TodosPage {
       return;
     }
 
-    const todo: Todo = {
-      id: this.nextId++,
-      text,
-      completed: false,
-    };
-
-    this.todos.update((list) => [...list, todo]);
+    this.todosService.addTodo(text);
     this.newTodoText.set('');
   }
 
@@ -44,18 +36,14 @@ export class TodosPage {
   }
 
   toggleTodo(id: number): void {
-    this.todos.update((list) =>
-      list.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+    this.todosService.toggleTodo(id);
   }
 
   removeTodo(id: number): void {
-    this.todos.update((list) => list.filter((todo) => todo.id !== id));
+    this.todosService.removeTodo(id);
   }
 
   clearCompleted(): void {
-    this.todos.update((list) => list.filter((todo) => !todo.completed));
+    this.todosService.clearCompleted();
   }
 }
