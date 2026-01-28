@@ -1,0 +1,45 @@
+<main class="todo-page">
+  <section class="todo-card">
+    <header class="todo-header">
+      <h1>{{ title }}</h1>
+      <p>Track your tasks using Angular signals.</p>
+    </header>
+
+    <form class="todo-input-row" (submit)="$event.preventDefault(); addTodo()">
+      <input type="text" placeholder="What do you need to do?" [value]="newTodoText()"
+        (input)="setNewTodoText($event)" />
+      <button type="submit">
+        Add
+      </button>
+    </form>
+
+    <section class="todo-list" *ngIf="todos().length; else emptyState">
+      <ul>
+        @for (todo of todos(); track todo.id) {
+        <li [class.completed]="todo.completed">
+          <label>
+            <input type="checkbox" [checked]="todo.completed" (change)="toggleTodo(todo.id)" />
+            <span>{{ todo.text }}</span>
+          </label>
+          <button type="button" class="remove-btn" (click)="removeTodo(todo.id)" aria-label="Remove todo">
+            ✕
+          </button>
+        </li>
+        }
+      </ul>
+    </section>
+
+    <ng-template #emptyState>
+      <p class="empty">No todos yet. Add your first one!</p>
+    </ng-template>
+
+    <footer class="todo-footer" *ngIf="todos().length">
+      <span>
+        {{ remainingCount() }} {{ remainingCount() === 1 ? 'item' : 'items' }} left
+      </span>
+      <button type="button" class="clear-btn" (click)="clearCompleted()">
+        Clear completed
+      </button>
+    </footer>
+  </section>
+</main>
