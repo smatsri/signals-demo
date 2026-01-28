@@ -5,7 +5,16 @@
       <p>Track your tasks using Angular signals.</p>
     </header>
 
-    <form class="todo-input-row" (submit)="$event.preventDefault(); addTodo()">
+    @if (todosResource.isLoading()) {
+    <p class="loading">Loading...</p>
+    }
+
+    @if (displayError(); as err) {
+    <p class="error" role="alert">{{ err }}</p>
+    }
+
+    <form class="todo-input-row" (submit)="$event.preventDefault(); addTodo()"
+      [class.disabled]="todosResource.isLoading()">
       <input type="text" placeholder="What do you need to do?" [value]="newTodoText()"
         (input)="setNewTodoText($event)" />
       <button type="submit">
@@ -13,6 +22,7 @@
       </button>
     </form>
 
+    @if (!todosResource.isLoading()) {
     <section class="todo-list" *ngIf="todos().length; else emptyState">
       <ul>
         @for (todo of todos(); track todo.id) {
@@ -41,5 +51,6 @@
         Clear completed
       </button>
     </footer>
+    }
   </section>
 </main>
