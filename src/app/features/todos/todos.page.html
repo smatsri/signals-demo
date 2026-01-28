@@ -9,7 +9,7 @@
     <p class="loading">Loading...</p>
     }
 
-    @if (store.displayError(); as err) {
+    @if (store.error(); as err) {
     <p class="error" role="alert">{{ err }}</p>
     }
 
