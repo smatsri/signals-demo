@@ -1,0 +1,49 @@
+---
+description: Angular project structure and naming conventions for this repo
+globs: src/app/**
+alwaysApply: false
+---
+
+### Angular project structure
+
+- **Feature-first** under `src/app`:
+  - `core/`: singletons and app-wide infrastructure (services, interceptors, guards, layout).
+  - `shared/`: reusable UI and utilities that are not tied to a specific feature (components, directives, pipes, utils).
+  - `features/`: one folder per domain/feature (e.g. `todos/`, `auth/`, `dashboard/`).
+
+- **Inside each feature folder** (e.g. `src/app/features/todos`):
+  - Place the main routed component as `xxx.page.ts` (e.g. `todos.page.ts`).
+  - Optional subfolders:
+    - `components/`: feature-specific components (`todo-list.component.ts`, `todo-item.component.ts`, etc.).
+    - `services/`: feature-specific services (`todos.service.ts`).
+    - `state/`: signal stores or state management (`todos.store.ts`).
+    - `models/`: feature-specific types/interfaces (`todo.model.ts`).
+
+### Naming conventions
+
+- **File names** (all kebab-case):
+  - Components: `xxx.component.ts` (+ `.html` / `.scss`).
+  - Routed pages: `xxx.page.ts` (+ `.html` / `.scss`).
+  - Services: `xxx.service.ts`.
+  - Directives: `xxx.directive.ts`.
+  - Pipes: `xxx.pipe.ts`.
+  - Stores/state: `xxx.store.ts` or `xxx.state.ts`.
+  - Models/types: `xxx.model.ts` or `xxx.types.ts`.
+  - Route configs: `xxx.routes.ts`.
+
+- **Class names** (PascalCase + Angular suffix):
+  - `TodoListComponent`, `TodosPage`, `AuthService`, `HighlightDirective`, `CurrencyFormatPipe`, `TodosStore`.
+
+- **Interfaces and types**:
+  - Use PascalCase without `I` prefix (e.g. `Todo`, `User`, `TodoFilter`).
+
+- **Signals and observables naming**:
+  - Signals: either `somethingSignal` or descriptive names without suffix, but be consistent (e.g. `todosSignal`, `isLoadingSignal`).
+  - Observables (RxJS): keep `$` suffix (e.g. `todos$`, `isLoading$`).
+
+- **Component selectors**:
+  - Use a consistent prefix for this app (e.g. `app-` or `sd-`).
+  - Kebab-case selectors: `app-todo-list`, `app-login-form`.
+
+- **Imports and dependencies**:
+  - Shared and core code may be imported from features, but **never** import one feature from another feature (avoid cross-feature coupling).
