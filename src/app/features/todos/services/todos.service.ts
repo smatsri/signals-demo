@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { Todo } from '../models/todo.model';
 
@@ -6,42 +7,29 @@ import { Todo } from '../models/todo.model';
   providedIn: 'root',
 })
 export class TodosService {
-  private nextId = 1;
 
-  readonly todos = signal<Todo[]>([]);
-  readonly remainingCount = computed(
-    () => this.todos().filter((todo) => !todo.completed).length
-  );
+  private readonly http = inject(HttpClient);
 
-  addTodo(text: string): void {
-    const trimmed = text.trim();
-    if (!trimmed) {
-      return;
-    }
-
-    const todo: Todo = {
-      id: this.nextId++,
-      text: trimmed,
-      completed: false,
-    };
-
-    this.todos.update((list) => [...list, todo]);
+  getTodos() {
+    const todos = this.http.get<Todo[]>('/api/todos');
+    return todos;
+  }
+  addTodo(text: string) {
+    const todo = this.http.post<Todo>('/api/todos', { text });
+    return todo;
+  }
+  setCompleted(id: number, completed: boolean) {
+    const todo = this.http.patch<Todo>(`/api/todos/${id}`, { completed });
+    return todo;
+  }
+  removeTodo(id: number) {
+    const todo = this.http.delete<Todo>(`/api/todos/${id}`);
+    return todo;
   }
 
-  toggleTodo(id: number): void {
-    this.todos.update((list) =>
-      list.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
-  }
-
-  removeTodo(id: number): void {
-    this.todos.update((list) => list.filter((todo) => todo.id !== id));
-  }
-
-  clearCompleted(): void {
-    this.todos.update((list) => list.filter((todo) => !todo.completed));
+  clearCompleted() {
+    const todos = this.http.delete<{ message: string }>('/api/todos');
+    return todos;
   }
 }
 

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { TodosService } from './services/todos.service';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-todos-page',
@@ -16,18 +17,20 @@ export class TodosPage {
 
   private readonly todosService = inject(TodosService);
 
-  readonly todos = this.todosService.todos;
+  readonly todosResource = rxResource({
+    defaultValue: [],
+    loader: () => this.todosService.getTodos(),
+
+  });
   readonly newTodoText = signal('');
-  readonly remainingCount = this.todosService.remainingCount;
+
+  remainingCount = computed(() => this.todosResource.value().filter((todo) => !todo.completed).length);
+  todos = computed(() => this.todosResource.value());
 
   addTodo(): void {
-    const text = this.newTodoText().trim();
-    if (!text) {
-      return;
-    }
-
-    this.todosService.addTodo(text);
-    this.newTodoText.set('');
+    this.todosService.addTodo(this.newTodoText()).subscribe((todo) => {
+      this.todosResource.value().push(todo);
+    });
   }
 
   setNewTodoText(event: Event): void {
@@ -36,14 +39,25 @@ export class TodosPage {
   }
 
   toggleTodo(id: number): void {
-    this.todosService.toggleTodo(id);
+    const todo = this.todosResource.value().find((todo) => todo.id === id);
+    if (!todo) return;
+    this.todosService.setCompleted(id, !todo.completed).subscribe((todo) => {
+      todo.completed = todo.completed;
+      this.todosResource.value().find((todo) => todo.id === id)!.completed = todo.completed;
+    });
   }
 
   removeTodo(id: number): void {
-    this.todosService.removeTodo(id);
+    this.todosService.removeTodo(id).subscribe((todo) => {
+      this.todosResource.value().splice(this.todosResource.value().findIndex((todo) => todo.id === id), 1);
+    });
   }
 
   clearCompleted(): void {
-    this.todosService.clearCompleted();
+    this.todosService.clearCompleted().subscribe(() => {
+      this.todosResource.update((todos) => todos.filter((todo) => !todo.completed));
+    });
+
   }
+
 }
