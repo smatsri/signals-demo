@@ -5,9 +5,9 @@ const app = express();
 app.use(cors());
 
 const todos = [
-  { id: 1, text: "Buy groceries", completed: false },
-  { id: 2, text: "Buy groceries", completed: false },
-  { id: 3, text: "Buy groceries", completed: false },
+  { id: 1, text: "Walk the dog in the park", completed: false },
+  { id: 2, text: "Finish reading a chapter of my book", completed: false },
+  { id: 3, text: "Call Mom and check in", completed: false },
 ];
 
 app.get("/api/todos", (req, res) => {
