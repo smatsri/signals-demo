@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { TodosService } from './services/todos.service';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-todos-page',
@@ -27,37 +28,32 @@ export class TodosPage {
   remainingCount = computed(() => this.todosResource.value().filter((todo) => !todo.completed).length);
   todos = computed(() => this.todosResource.value());
 
-  addTodo(): void {
-    this.todosService.addTodo(this.newTodoText()).subscribe((todo) => {
-      this.todosResource.value().push(todo);
-    });
-  }
-
   setNewTodoText(event: Event): void {
     const text = (event.target as HTMLInputElement).value;
     this.newTodoText.set(text);
   }
 
-  toggleTodo(id: number): void {
+  async addTodo() {
+    const todo = await firstValueFrom(this.todosService.addTodo(this.newTodoText()));
+    this.todosResource.update((todos) => [...todos, todo]);
+  }
+
+  async toggleTodo(id: number) {
     const todo = this.todosResource.value().find((todo) => todo.id === id);
     if (!todo) return;
-    this.todosService.setCompleted(id, !todo.completed).subscribe((todo) => {
-      todo.completed = todo.completed;
-      this.todosResource.value().find((todo) => todo.id === id)!.completed = todo.completed;
-    });
+    await firstValueFrom(this.todosService.setCompleted(id, !todo.completed));
+    todo.completed = !todo.completed;
+    this.todosResource.update((todos) => todos.map((t) => t.id === id ? todo : t));
   }
 
-  removeTodo(id: number): void {
-    this.todosService.removeTodo(id).subscribe((todo) => {
-      this.todosResource.value().splice(this.todosResource.value().findIndex((todo) => todo.id === id), 1);
-    });
+  async removeTodo(id: number) {
+    await firstValueFrom(this.todosService.removeTodo(id));
+    this.todosResource.update((todos) => todos.filter((todo) => todo.id !== id));
   }
 
-  clearCompleted(): void {
-    this.todosService.clearCompleted().subscribe(() => {
-      this.todosResource.update((todos) => todos.filter((todo) => !todo.completed));
-    });
-
+  async clearCompleted() {
+    await firstValueFrom(this.todosService.clearCompleted());
+    this.todosResource.update((todos) => todos.filter((todo) => !todo.completed));
   }
 
 }
