@@ -32,53 +32,59 @@ export class TodosStore {
     return resourceErr != null ? String(resourceErr) : null;
   });
 
+
+
   // --- ACTIONS ---
   async addTodo(): Promise<void> {
     const text = this.newTodoText().trim();
     if (!text) return;
 
-    this.errorMessage.set(null);
-    try {
+    await this.runWithErrorHandling(async () => {
       const todo = await firstValueFrom(this.todosService.addTodo(text));
       this.todosResource.update((prev) => [...prev, todo]);
       this.newTodoText.set('');
-    } catch (err) {
-      this.errorMessage.set('Failed to add todo');
-    }
+    }, 'Failed to add todo');
   }
 
   async toggleTodo(id: number): Promise<void> {
     const todo = this.todos().find((t) => t.id === id);
     if (!todo) return;
 
-    this.errorMessage.set(null);
-    try {
-      await firstValueFrom(this.todosService.setCompleted(id, !todo.completed));
+    await this.runWithErrorHandling(async () => {
+      await firstValueFrom(
+        this.todosService.setCompleted(id, !todo.completed)
+      );
       this.todosResource.update((prev) =>
         prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
       );
-    } catch (err) {
-      this.errorMessage.set('Failed to update todo');
-    }
+    }, 'Failed to update todo');
   }
 
   async removeTodo(id: number): Promise<void> {
-    this.errorMessage.set(null);
-    try {
+    await this.runWithErrorHandling(async () => {
       await firstValueFrom(this.todosService.removeTodo(id));
       this.todosResource.update((prev) => prev.filter((t) => t.id !== id));
-    } catch (err) {
-      this.errorMessage.set('Failed to remove todo');
-    }
+    }, 'Failed to remove todo');
   }
 
   async clearCompleted(): Promise<void> {
-    this.errorMessage.set(null);
-    try {
+    await this.runWithErrorHandling(async () => {
       await firstValueFrom(this.todosService.clearCompleted());
       this.todosResource.update((prev) => prev.filter((t) => !t.completed));
-    } catch (err) {
-      this.errorMessage.set('Failed to clear completed');
+    }, 'Failed to clear completed');
+  }
+
+  // --- PRIVATE METHODS ---
+  private async runWithErrorHandling(
+    action: () => Promise<void>,
+    errorMessage: string
+  ): Promise<void> {
+    this.errorMessage.set(null);
+    try {
+      await action();
+    } catch {
+      this.errorMessage.set(errorMessage);
     }
   }
+
 }
