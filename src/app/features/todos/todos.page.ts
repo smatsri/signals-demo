@@ -26,13 +26,12 @@ export class TodosPage {
   readonly newTodoText = signal('');
   readonly errorMessage = signal<string | null>(null);
 
-  remainingCount = computed(() => this.todosResource.value().filter((todo) => !todo.completed).length);
-  todos = computed(() => this.todosResource.value());
-  displayError = computed(() => {
+  readonly remainingCount = computed(() => this.todosResource.value().filter((todo) => !todo.completed).length);
+  readonly todos = computed(() => this.todosResource.value());
+  readonly displayError = computed(() => {
     const err = this.errorMessage();
     if (err) return err;
-    const resErr = this.todosResource.error();
-    return resErr != null ? String(resErr) : null;
+    return this.todosResource.error() != null ? String(this.todosResource.error()) : null;
   });
 
   setNewTodoText(event: Event): void {
