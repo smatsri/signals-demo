@@ -1,8 +1,8 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { Observable, firstValueFrom } from 'rxjs';
 import { TodosService } from './todos.service';
 import { Todo } from '../models/todo.model';
+import { mutation } from '../../../shared/utils/mutation';
 
 @Injectable()
 export class TodosStore {
@@ -18,11 +18,11 @@ export class TodosStore {
   });
 
   // ─── MUTATIONS ─────────────────────────────────────────
-  private readonly addTodoMutation = this.createMutation<Todo>();
-  private readonly toggleTodoMutation = this.createMutation<Todo>();
-  private readonly removeTodoMutation = this.createMutation<Todo>();
+  private readonly addTodoMutation = mutation<Todo>();
+  private readonly toggleTodoMutation = mutation<Todo>();
+  private readonly removeTodoMutation = mutation<Todo>();
   private readonly clearCompletedMutation =
-    this.createMutation<{ message: string }>();
+    mutation<{ message: string }>();
 
   // ─── SELECTORS ─────────────────────────────────────────
   readonly todos = computed(() => this.todosResource.value());
@@ -101,34 +101,5 @@ export class TodosStore {
       },
       'Failed to clear completed todos'
     );
-  }
-
-  // ─── MUTATION FACTORY ──────────────────────────────────
-  private createMutation<T>() {
-    const isLoading = signal(false);
-    const error = signal<string | null>(null);
-
-    return {
-      isLoading,
-      error,
-
-      async run(
-        op: () => Observable<T>,
-        onSuccess: (value: T) => void,
-        msg: string
-      ): Promise<void> {
-        isLoading.set(true);
-        error.set(null);
-
-        try {
-          const result = await firstValueFrom(op());
-          onSuccess(result);
-        } catch {
-          error.set(msg);
-        } finally {
-          isLoading.set(false);
-        }
-      }
-    };
   }
 }
