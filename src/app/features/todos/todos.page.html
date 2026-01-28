@@ -13,8 +13,7 @@
     <p class="error" role="alert">{{ err }}</p>
     }
 
-    <form class="todo-input-row" (submit)="$event.preventDefault(); store.addTodo()"
-      [class.disabled]="store.todosResource.isLoading()">
+    <form class="todo-input-row" (submit)="$event.preventDefault(); store.addTodo()" [class.disabled]="store.isBusy()">
       <input type="text" placeholder="What do you need to do?" [value]="store.newTodoText()"
         (input)="handleInputChange($event)" />
       <button type="submit">
@@ -22,7 +21,7 @@
       </button>
     </form>
 
-    @if (!store.todosResource.isLoading()) {
+    @if (!store.isBusy()) {
     <section class="todo-list" *ngIf="store.todos().length; else emptyState">
       <ul>
         @for (todo of store.todos(); track todo.id) {

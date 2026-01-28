@@ -11,6 +11,7 @@ export class TodosStore {
   // --- STATE ---
   readonly newTodoText = signal('');
   readonly errorMessage = signal<string | null>(null);
+  private readonly isSaving = signal(false);
 
   // --- DATA FETCHING ---
   readonly todosResource = rxResource({
@@ -32,6 +33,7 @@ export class TodosStore {
     return resourceErr != null ? String(resourceErr) : null;
   });
 
+  readonly isBusy = computed(() => this.isSaving() || this.todosResource.isLoading());
 
 
   // --- ACTIONS ---
@@ -39,7 +41,7 @@ export class TodosStore {
     const text = this.newTodoText().trim();
     if (!text) return;
 
-    await this.runWithErrorHandling(async () => {
+    await this.runAction(async () => {
       const todo = await firstValueFrom(this.todosService.addTodo(text));
       this.todosResource.update((prev) => [...prev, todo]);
       this.newTodoText.set('');
@@ -50,7 +52,7 @@ export class TodosStore {
     const todo = this.todos().find((t) => t.id === id);
     if (!todo) return;
 
-    await this.runWithErrorHandling(async () => {
+    await this.runAction(async () => {
       await firstValueFrom(
         this.todosService.setCompleted(id, !todo.completed)
       );
@@ -61,29 +63,32 @@ export class TodosStore {
   }
 
   async removeTodo(id: number): Promise<void> {
-    await this.runWithErrorHandling(async () => {
+    await this.runAction(async () => {
       await firstValueFrom(this.todosService.removeTodo(id));
       this.todosResource.update((prev) => prev.filter((t) => t.id !== id));
     }, 'Failed to remove todo');
   }
 
   async clearCompleted(): Promise<void> {
-    await this.runWithErrorHandling(async () => {
+    await this.runAction(async () => {
       await firstValueFrom(this.todosService.clearCompleted());
       this.todosResource.update((prev) => prev.filter((t) => !t.completed));
     }, 'Failed to clear completed');
   }
 
   // --- PRIVATE METHODS ---
-  private async runWithErrorHandling(
+  private async runAction(
     action: () => Promise<void>,
     errorMessage: string
   ): Promise<void> {
+    this.isSaving.set(true);
     this.errorMessage.set(null);
     try {
       await action();
     } catch {
       this.errorMessage.set(errorMessage);
+    } finally {
+      this.isSaving.set(false);
     }
   }
 
