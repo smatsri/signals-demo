@@ -5,33 +5,33 @@
       <p>Track your tasks using Angular signals.</p>
     </header>
 
-    @if (todosResource.isLoading()) {
+    @if (store.todosResource.isLoading()) {
     <p class="loading">Loading...</p>
     }
 
-    @if (displayError(); as err) {
+    @if (store.displayError(); as err) {
     <p class="error" role="alert">{{ err }}</p>
     }
 
-    <form class="todo-input-row" (submit)="$event.preventDefault(); addTodo()"
-      [class.disabled]="todosResource.isLoading()">
-      <input type="text" placeholder="What do you need to do?" [value]="newTodoText()"
-        (input)="setNewTodoText($event)" />
+    <form class="todo-input-row" (submit)="$event.preventDefault(); store.addTodo()"
+      [class.disabled]="store.todosResource.isLoading()">
+      <input type="text" placeholder="What do you need to do?" [value]="store.newTodoText()"
+        (input)="handleInputChange($event)" />
       <button type="submit">
         Add
       </button>
     </form>
 
-    @if (!todosResource.isLoading()) {
-    <section class="todo-list" *ngIf="todos().length; else emptyState">
+    @if (!store.todosResource.isLoading()) {
+    <section class="todo-list" *ngIf="store.todos().length; else emptyState">
       <ul>
-        @for (todo of todos(); track todo.id) {
+        @for (todo of store.todos(); track todo.id) {
         <li [class.completed]="todo.completed">
           <label>
-            <input type="checkbox" [checked]="todo.completed" (change)="toggleTodo(todo.id)" />
+            <input type="checkbox" [checked]="todo.completed" (change)="store.toggleTodo(todo.id)" />
             <span>{{ todo.text }}</span>
           </label>
-          <button type="button" class="remove-btn" (click)="removeTodo(todo.id)" aria-label="Remove todo">
+          <button type="button" class="remove-btn" (click)="store.removeTodo(todo.id)" aria-label="Remove todo">
             ✕
           </button>
         </li>
@@ -43,11 +43,11 @@
       <p class="empty">No todos yet. Add your first one!</p>
     </ng-template>
 
-    <footer class="todo-footer" *ngIf="todos().length">
+    <footer class="todo-footer" *ngIf="store.todos().length">
       <span>
-        {{ remainingCount() }} {{ remainingCount() === 1 ? 'item' : 'items' }} left
+        {{ store.remainingCount() }} {{ store.remainingCount() === 1 ? 'item' : 'items' }} left
       </span>
-      <button type="button" class="clear-btn" (click)="clearCompleted()">
+      <button type="button" class="clear-btn" (click)="store.clearCompleted()">
         Clear completed
       </button>
     </footer>
