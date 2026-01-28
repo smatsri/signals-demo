@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { TodosService } from './todos.service';
 import { Todo } from '../models/todo.model';
 
@@ -41,50 +41,66 @@ export class TodosStore {
     const text = this.newTodoText().trim();
     if (!text) return;
 
-    await this.runAction(async () => {
-      const todo = await firstValueFrom(this.todosService.addTodo(text));
-      this.todosResource.update((prev) => [...prev, todo]);
-      this.newTodoText.set('');
-    }, 'Failed to add todo');
+    await this.run(
+      () => this.todosService.addTodo(text),
+      (todo) => {
+        this.todosResource.update((prev) => [...prev, todo]);
+        this.newTodoText.set('');
+      },
+      'Failed to add todo'
+    );
   }
 
   async toggleTodo(id: number): Promise<void> {
     const todo = this.todos().find((t) => t.id === id);
     if (!todo) return;
 
-    await this.runAction(async () => {
-      await firstValueFrom(
-        this.todosService.setCompleted(id, !todo.completed)
-      );
-      this.todosResource.update((prev) =>
-        prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
-      );
-    }, 'Failed to update todo');
+    await this.run(
+      () => this.todosService.setCompleted(id, !todo.completed),
+      () => {
+        this.todosResource.update((prev) =>
+          prev.map((t) =>
+            t.id === id ? { ...t, completed: !t.completed } : t
+          )
+        );
+      },
+      'Failed to update todo'
+    );
   }
 
   async removeTodo(id: number): Promise<void> {
-    await this.runAction(async () => {
-      await firstValueFrom(this.todosService.removeTodo(id));
-      this.todosResource.update((prev) => prev.filter((t) => t.id !== id));
-    }, 'Failed to remove todo');
+    await this.run(
+      () => this.todosService.removeTodo(id),
+      () => {
+        this.todosResource.update((prev) => prev.filter((t) => t.id !== id));
+      },
+      'Failed to remove todo'
+    );
   }
 
   async clearCompleted(): Promise<void> {
-    await this.runAction(async () => {
-      await firstValueFrom(this.todosService.clearCompleted());
-      this.todosResource.update((prev) => prev.filter((t) => !t.completed));
-    }, 'Failed to clear completed');
+    await this.run(
+      () => this.todosService.clearCompleted(),
+      () => {
+        this.todosResource.update((prev) => prev.filter((t) => !t.completed));
+      },
+      'Failed to clear completed'
+    );
   }
 
   // --- PRIVATE METHODS ---
-  private async runAction(
-    action: () => Promise<void>,
+  private async run<T>(
+    operation: () => Observable<T>,
+    onSuccess: (result: T) => void,
     errorMessage: string
   ): Promise<void> {
     this.isSaving.set(true);
     this.errorMessage.set(null);
     try {
-      await action();
+      const result = await firstValueFrom(operation());
+      if (onSuccess) {
+        onSuccess(result);
+      }
     } catch {
       this.errorMessage.set(errorMessage);
     } finally {
