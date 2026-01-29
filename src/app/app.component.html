@@ -24,6 +24,14 @@
         <strong>Global state</strong>
         <p>Theme: {{ themeStore.effectiveTheme() }}</p>
         <p>Sidebar: {{ layoutStore.sidebarOpen() ? 'open' : 'closed' }}</p>
+        <button type="button" class="app-global-state-btn"
+          (click)="notificationsStore.add({ message: 'Hello from global state', type: 'info' })">
+          Show toast
+        </button>
+        <button type="button" class="app-global-state-btn"
+          (click)="notificationsStore.add({ message: 'Success!', type: 'success', duration: 2000 })">
+          Success toast (2s)
+        </button>
       </div>
     </aside>
 
@@ -31,4 +39,5 @@
       <router-outlet></router-outlet>
     </main>
   </div>
+  <app-notifications-list />
 </div>
