@@ -1,0 +1,44 @@
+<main class="team-page">
+  <header class="team-header">
+    <a routerLink="/teams" class="team-back">← Back to teams</a>
+  </header>
+
+  @if (team(); as t) {
+  <article class="team-detail">
+    <div class="team-detail-image">
+      @if (t.fanartUrl) {
+      <img [src]="t.fanartUrl" [alt]="t.name" />
+      } @else if (t.badgeUrl) {
+      <img [src]="t.badgeUrl" [alt]="t.name" />
+      } @else {
+      <div class="team-detail-placeholder">No image</div>
+      }
+    </div>
+    <div class="team-detail-body">
+      <h1 class="team-detail-name">{{ t.name }}</h1>
+      @if (t.shortName) {
+      <p class="team-detail-meta">{{ t.shortName }}</p>
+      }
+      <p class="team-detail-meta">{{ t.stadium }}</p>
+      <p class="team-detail-meta">{{ t.location }}</p>
+      @if (t.description) {
+      <p class="team-detail-desc">{{ t.description }}</p>
+      }
+    </div>
+  </article>
+  } @else if (teamResource.isLoading()) {
+  <p class="team-status" role="status">Loading team…</p>
+  } @else if (teamResource.error()) {
+  <p class="team-error" role="alert">Error: {{ errorMessage() ?? 'Failed to load team' }}</p>
+  } @else {
+  <p class="team-status">Team not found.</p>
+  }
+
+  <footer class="team-footer">
+    <a routerLink="/teams">Teams</a>
+    <a routerLink="/">Todos</a>
+    <a routerLink="/counter">Counter</a>
+    <a routerLink="/effect-logger">Effect logger</a>
+    <a routerLink="/contact">Contact</a>
+  </footer>
+</main>

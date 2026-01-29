@@ -28,4 +28,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/teams/teams.page').then((m) => m.TeamsPage),
   },
+  {
+    path: 'teams/:id',
+    loadComponent: () =>
+      import('./features/teams/team.page').then((m) => m.TeamPage),
+  },
 ];

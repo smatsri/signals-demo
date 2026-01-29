@@ -1,7 +1,9 @@
 import { SlicePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 
+import { Team } from './team.model';
 import { TeamsService } from './services/teams.service';
 
 @Component({
@@ -12,5 +14,17 @@ import { TeamsService } from './services/teams.service';
   styleUrl: './teams.page.css',
 })
 export class TeamsPage {
-  readonly teamsService = inject(TeamsService);
+  private readonly teamsService = inject(TeamsService);
+
+  readonly teamsResource = rxResource({
+    defaultValue: [] as Team[],
+    loader: () => this.teamsService.getTeams(),
+  });
+
+  readonly teams = computed(() => this.teamsResource.value());
+
+  readonly errorMessage = computed(() => {
+    const err = this.teamsResource.error();
+    return err instanceof Error ? err.message : err != null ? String(err) : null;
+  });
 }

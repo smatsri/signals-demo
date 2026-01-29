@@ -1,31 +1,28 @@
-.teams-page {
+.team-page {
   min-height: 100vh;
   padding: 2rem 1rem;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
-.teams-header {
+.team-header {
   max-width: 900px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1.5rem;
   padding: 0 0.5rem;
 }
 
-.teams-header h1 {
-  margin: 0 0 0.25rem;
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #fff;
-}
-
-.teams-header p {
-  margin: 0;
+.team-back {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
   font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.85);
 }
 
-.teams-status,
-.teams-error {
+.team-back:hover {
+  text-decoration: underline;
+}
+
+.team-status,
+.team-error {
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem 1rem;
@@ -33,52 +30,32 @@
   color: #fff;
 }
 
-.teams-error {
+.team-error {
   color: #fca5a5;
 }
 
-.teams-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  max-width: 1100px;
+.team-detail {
+  max-width: 700px;
   margin: 0 auto;
-}
-
-.team-card-link {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-}
-
-.team-card {
   background: rgba(255, 255, 255, 0.97);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.team-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
-}
-
-.team-card-image {
-  aspect-ratio: 16 / 10;
+.team-detail-image {
+  aspect-ratio: 16 / 9;
   background: #e5e7eb;
   overflow: hidden;
 }
 
-.team-card-image img {
+.team-detail-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.team-card-placeholder {
+.team-detail-placeholder {
   width: 100%;
   height: 100%;
   display: flex;
@@ -88,34 +65,33 @@
   font-size: 0.875rem;
 }
 
-.team-card-body {
-  padding: 1rem 1.25rem;
-  flex: 1;
+.team-detail-body {
+  padding: 1.5rem 1.5rem 2rem;
 }
 
-.team-card-name {
+.team-detail-name {
   margin: 0 0 0.5rem;
-  font-size: 1.125rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: #1a1a2e;
   line-height: 1.3;
 }
 
-.team-card-meta {
+.team-detail-meta {
   margin: 0 0 0.25rem;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   color: #6b7280;
 }
 
-.team-card-desc {
-  margin: 0.75rem 0 0;
-  font-size: 0.8125rem;
+.team-detail-desc {
+  margin: 1rem 0 0;
+  font-size: 0.9375rem;
   color: #4b5563;
-  line-height: 1.45;
+  line-height: 1.55;
 }
 
-.teams-footer {
-  max-width: 1100px;
+.team-footer {
+  max-width: 900px;
   margin: 2rem auto 0;
   padding: 1rem 0.5rem;
   display: flex;
@@ -124,11 +100,11 @@
   font-size: 0.875rem;
 }
 
-.teams-footer a {
+.team-footer a {
   color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
 }
 
-.teams-footer a:hover {
+.team-footer a:hover {
   text-decoration: underline;
 }
