@@ -1,5 +1,5 @@
 import { SlicePipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { TeamsService } from './services/teams.service';
@@ -11,10 +11,6 @@ import { TeamsService } from './services/teams.service';
   templateUrl: './teams.page.html',
   styleUrl: './teams.page.css',
 })
-export class TeamsPage implements OnInit {
+export class TeamsPage {
   readonly teamsService = inject(TeamsService);
-
-  ngOnInit(): void {
-    this.teamsService.loadTeams();
-  }
 }

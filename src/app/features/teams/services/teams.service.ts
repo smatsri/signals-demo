@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 import { Team } from '../team.model';
 
@@ -40,24 +42,16 @@ function mapToTeam(raw: TheSportsDbTeam): Team {
 export class TeamsService {
   private readonly http = inject(HttpClient);
 
-  readonly teams = signal<Team[]>([]);
-  readonly loading = signal(false);
-  readonly error = signal<string | null>(null);
+  readonly teamsResource = rxResource({
+    defaultValue: [] as Team[],
+    loader: () =>
+      this.http
+        .get<TheSportsDbResponse>(API_URL)
+        .pipe(map((res) => (res.teams ?? []).map(mapToTeam))),
+  });
 
-  loadTeams(): void {
-    this.loading.set(true);
-    this.error.set(null);
-    this.http.get<TheSportsDbResponse>(API_URL).subscribe({
-      next: (res) => {
-        const list = res.teams ?? [];
-        this.teams.set(list.map(mapToTeam));
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.error.set(err?.message ?? 'Failed to load teams');
-        this.loading.set(false);
-      },
-    });
-  }
+  readonly errorMessage = computed(() => {
+    const err = this.teamsResource.error();
+    return err instanceof Error ? err.message : err != null ? String(err) : null;
+  });
 }
-
