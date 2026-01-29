@@ -106,21 +106,3 @@
 .effect-logger-output p:last-child {
   margin-bottom: 0;
 }
-
-.effect-logger-footer {
-  display: flex;
-  gap: 1rem;
-  padding: 0.75rem 1.5rem;
-  background: #fff;
-  border-top: 1px solid #e5e7eb;
-  font-size: 0.875rem;
-}
-
-.effect-logger-footer a {
-  color: #0f3460;
-  text-decoration: none;
-}
-
-.effect-logger-footer a:hover {
-  text-decoration: underline;
-}

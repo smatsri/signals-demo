@@ -140,21 +140,3 @@
   font-size: 0.9rem;
   color: #6b7280;
 }
-
-.contact-footer {
-  display: flex;
-  gap: 1rem;
-  padding: 0.75rem 1.5rem;
-  background: #f9fafb;
-  border-top: 1px solid #e5e7eb;
-  font-size: 0.875rem;
-}
-
-.contact-footer a {
-  color: #0f3460;
-  text-decoration: none;
-}
-
-.contact-footer a:hover {
-  text-decoration: underline;
-}

@@ -89,22 +89,3 @@
   color: #4b5563;
   line-height: 1.55;
 }
-
-.team-footer {
-  max-width: 900px;
-  margin: 2rem auto 0;
-  padding: 1rem 0.5rem;
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  font-size: 0.875rem;
-}
-
-.team-footer a {
-  color: rgba(255, 255, 255, 0.9);
-  text-decoration: none;
-}
-
-.team-footer a:hover {
-  text-decoration: underline;
-}

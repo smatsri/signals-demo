@@ -37,9 +37,18 @@
       </div>
     </aside>
 
-    <main class="app-main">
-      <router-outlet></router-outlet>
-    </main>
+    <div class="app-content">
+      <main class="app-main">
+        <router-outlet></router-outlet>
+      </main>
+      <footer class="app-footer">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Todos</a>
+        <a routerLink="/counter" routerLinkActive="active">Counter</a>
+        <a routerLink="/effect-logger" routerLinkActive="active">Effect logger</a>
+        <a routerLink="/contact" routerLinkActive="active">Contact</a>
+        <a routerLink="/teams" routerLinkActive="active">Teams</a>
+      </footer>
+    </div>
   </div>
   <app-notifications-list />
 </div>
