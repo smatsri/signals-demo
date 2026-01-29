@@ -1,11 +1,34 @@
-<nav class="app-nav">
-  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Todos</a>
-  <a routerLink="/counter" routerLinkActive="active">Counter</a>
-  <a routerLink="/effect-logger" routerLinkActive="active">Effect logger</a>
-  <button type="button" class="app-nav-theme" (click)="themeStore.cyclePreference()"
-    [attr.aria-label]="'Theme: ' + themeStore.effectiveTheme() + '. Click to cycle.'"
-    [title]="'Theme: ' + themeStore.preference()">
-    {{ themeStore.effectiveTheme() === 'dark' ? '☀️' : '🌙' }}
-  </button>
-</nav>
-<router-outlet></router-outlet>
+<div class="app-shell" [class.sidebar-open]="layoutStore.sidebarOpen()">
+  <header class="app-topbar">
+    <button type="button" class="app-menu-btn" (click)="layoutStore.toggleSidebar()"
+      [attr.aria-label]="layoutStore.sidebarOpen() ? 'Close sidebar' : 'Open sidebar'"
+      [attr.aria-expanded]="layoutStore.sidebarOpen()">
+      {{ layoutStore.sidebarOpen() ? '✕' : '☰' }}
+    </button>
+    <span class="app-title">Signals Demo</span>
+  </header>
+
+  <div class="app-body">
+    <aside class="app-sidebar">
+      <nav class="app-nav">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Todos</a>
+        <a routerLink="/counter" routerLinkActive="active">Counter</a>
+        <a routerLink="/effect-logger" routerLinkActive="active">Effect logger</a>
+      </nav>
+      <button type="button" class="app-sidebar-theme" (click)="themeStore.cyclePreference()"
+        [attr.aria-label]="'Theme: ' + themeStore.effectiveTheme() + '. Click to cycle.'"
+        [title]="'Theme: ' + themeStore.preference()">
+        {{ themeStore.effectiveTheme() === 'dark' ? '☀️ Light' : '🌙 Dark' }}
+      </button>
+      <div class="app-global-state">
+        <strong>Global state</strong>
+        <p>Theme: {{ themeStore.effectiveTheme() }}</p>
+        <p>Sidebar: {{ layoutStore.sidebarOpen() ? 'open' : 'closed' }}</p>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
