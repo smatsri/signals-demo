@@ -1,5 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
 
+:root,
+html.light {
+  --app-bg: #f5f5f7;
+  --app-surface: #ffffff;
+  --app-text: #1d1d1f;
+  --app-text-muted: #6e6e73;
+  --app-accent: #0071e3;
+  --app-nav-bg: #e8e8ed;
+  --app-nav-link: #1d1d1f;
+  --app-nav-link-active: #0071e3;
+}
+
+html.dark {
+  --app-bg: #1a1a2e;
+  --app-surface: #16213e;
+  --app-text: #e8e8ed;
+  --app-text-muted: #a1a1a6;
+  --app-accent: #0ea5e9;
+  --app-nav-bg: #16213e;
+  --app-nav-link: rgba(255, 255, 255, 0.85);
+  --app-nav-link-active: #fff;
+}
+
 body {
   font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--app-bg);
+  color: var(--app-text);
 }

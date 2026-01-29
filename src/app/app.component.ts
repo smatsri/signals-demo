@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ThemeStore } from './core/theme/theme.store';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css',
   imports: [RouterLink, RouterLinkActive, RouterOutlet],
 })
-export class AppComponent { }
+export class AppComponent {
+  protected readonly themeStore = inject(ThemeStore);
+}
