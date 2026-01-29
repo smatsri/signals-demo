@@ -1,0 +1,43 @@
+<main class="teams-page">
+  <header class="teams-header">
+    <h1>NBA Teams</h1>
+    <p>Teams loaded from TheSportsDB API. Each card shows badge, name, stadium, and a short description.</p>
+  </header>
+
+  @if (teamsService.loading()) {
+  <p class="teams-status" role="status">Loading teams…</p>
+  } @else if (teamsService.error()) {
+  <p class="teams-error" role="alert">Error: {{ teamsService.error() }}</p>
+  } @else {
+  <div class="teams-grid">
+    @for (team of teamsService.teams(); track team.id) {
+    <article class="team-card">
+      <div class="team-card-image">
+        @if (team.fanartUrl) {
+        <img [src]="team.fanartUrl" [alt]="team.name" loading="lazy" />
+        } @else if (team.badgeUrl) {
+        <img [src]="team.badgeUrl" [alt]="team.name" loading="lazy" />
+        } @else {
+        <div class="team-card-placeholder">No image</div>
+        }
+      </div>
+      <div class="team-card-body">
+        <h2 class="team-card-name">{{ team.name }}</h2>
+        <p class="team-card-meta">{{ team.stadium }}</p>
+        <p class="team-card-meta">{{ team.location }}</p>
+        @if (team.description) {
+        <p class="team-card-desc">{{ team.description | slice:0:160 }}{{ team.description.length > 160 ? '…' : '' }}</p>
+        }
+      </div>
+    </article>
+    }
+  </div>
+  }
+
+  <footer class="teams-footer">
+    <a routerLink="/">Todos</a>
+    <a routerLink="/counter">Counter</a>
+    <a routerLink="/effect-logger">Effect logger</a>
+    <a routerLink="/contact">Contact</a>
+  </footer>
+</main>

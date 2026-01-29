@@ -14,6 +14,8 @@
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Todos</a>
         <a routerLink="/counter" routerLinkActive="active">Counter</a>
         <a routerLink="/effect-logger" routerLinkActive="active">Effect logger</a>
+        <a routerLink="/contact" routerLinkActive="active">Contact</a>
+        <a routerLink="/teams" routerLinkActive="active">Teams</a>
       </nav>
       <button type="button" class="app-sidebar-theme" (click)="themeStore.cyclePreference()"
         [attr.aria-label]="'Theme: ' + themeStore.effectiveTheme() + '. Click to cycle.'"
@@ -24,6 +26,14 @@
         <strong>Global state</strong>
         <p>Theme: {{ themeStore.effectiveTheme() }}</p>
         <p>Sidebar: {{ layoutStore.sidebarOpen() ? 'open' : 'closed' }}</p>
+        <button type="button" class="app-global-state-btn"
+          (click)="notificationsStore.add({ message: 'Hello from global state', type: 'info' })">
+          Show toast
+        </button>
+        <button type="button" class="app-global-state-btn"
+          (click)="notificationsStore.add({ message: 'Success!', type: 'success', duration: 2000 })">
+          Success toast (2s)
+        </button>
       </div>
     </aside>
 
@@ -31,4 +41,5 @@
       <router-outlet></router-outlet>
     </main>
   </div>
+  <app-notifications-list />
 </div>

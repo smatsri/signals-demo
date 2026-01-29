@@ -1,0 +1,13 @@
+@if (notificationsStore.hasNotifications()) {
+<div class="notifications-list">
+  @for (notification of notificationsStore.notifications(); track notification.id) {
+  <div class="toast toast--{{ notification.type }}" role="status">
+    <span class="toast-message">{{ notification.message }}</span>
+    <button type="button" class="toast-dismiss" (click)="notificationsStore.dismiss(notification.id)"
+      [attr.aria-label]="'Dismiss notification'">
+      &#215;
+    </button>
+  </div>
+  }
+</div>
+}

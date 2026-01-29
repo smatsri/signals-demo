@@ -55,6 +55,8 @@
   gap: 1rem;
   transform: translateX(-100%);
   transition: transform 0.2s ease;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .app-shell.sidebar-open .app-sidebar {
@@ -105,7 +107,6 @@
 }
 
 .app-global-state {
-  margin-top: auto;
   padding: 1rem;
   font-size: 0.8rem;
   color: var(--app-text-muted);
@@ -120,6 +121,23 @@
 
 .app-global-state p {
   margin: 0.25rem 0;
+}
+
+.app-global-state-btn {
+  display: block;
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--app-text);
+  background: var(--app-surface);
+  border: 1px solid var(--app-text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.app-global-state-btn:hover {
+  opacity: 0.9;
 }
 
 .app-main {
@@ -139,6 +157,7 @@
     top: auto;
     left: auto;
     height: auto;
+    max-height: 100%;
     padding-top: 1rem;
     flex-shrink: 0;
     transform: none;
