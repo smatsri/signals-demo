@@ -4,13 +4,13 @@
     <p>Teams loaded from TheSportsDB API. Each card shows badge, name, stadium, and a short description.</p>
   </header>
 
-  @if (teamsService.teamsResource.isLoading()) {
+  @if (teamsResource.isLoading()) {
   <p class="teams-status" role="status">Loading teams…</p>
-  } @else if (teamsService.teamsResource.error()) {
-  <p class="teams-error" role="alert">Error: {{ teamsService.errorMessage() ?? 'Failed to load teams' }}</p>
+  } @else if (teamsResource.error()) {
+  <p class="teams-error" role="alert">Error: {{ errorMessage() ?? 'Failed to load teams' }}</p>
   } @else {
   <div class="teams-grid">
-    @for (team of teamsService.teamsResource.value(); track team.id) {
+    @for (team of teams(); track team.id) {
     <a [routerLink]="['/teams', team.id]" class="team-card-link">
       <article class="team-card">
         <div class="team-card-image">

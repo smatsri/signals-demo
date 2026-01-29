@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
-import { map, Observable, of } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 
 import { Team } from '../team.model';
 
@@ -44,13 +43,11 @@ function mapToTeam(raw: TheSportsDbTeam): Team {
 export class TeamsService {
   private readonly http = inject(HttpClient);
 
-  readonly teamsResource = rxResource({
-    defaultValue: [] as Team[],
-    loader: () =>
-      this.http
-        .get<TheSportsDbResponse>(API_URL)
-        .pipe(map((res) => (res.teams ?? []).map(mapToTeam))),
-  });
+  getTeams(): Observable<Team[]> {
+    return this.http
+      .get<TheSportsDbResponse>(API_URL)
+      .pipe(map((res) => (res.teams ?? []).map(mapToTeam)));
+  }
 
   getTeamById(id: string): Observable<Team | null> {
     return this.http.get<TheSportsDbResponse>(`${TEAM_LOOKUP_URL}${id}`).pipe(
@@ -60,9 +57,4 @@ export class TeamsService {
       })
     );
   }
-
-  readonly errorMessage = computed(() => {
-    const err = this.teamsResource.error();
-    return err instanceof Error ? err.message : err != null ? String(err) : null;
-  });
 }
