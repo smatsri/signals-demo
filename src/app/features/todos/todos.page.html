@@ -22,9 +22,21 @@
     </form>
 
     @if (!store.isBusy()) {
-    <section class="todo-list" *ngIf="store.todos().length; else emptyState">
+    <nav class="filter-bar" aria-label="Filter todos">
+      <button type="button" [class.active]="store.currentFilter() === 'all'" (click)="store.setFilter('all')">
+        All
+      </button>
+      <button type="button" [class.active]="store.currentFilter() === 'active'" (click)="store.setFilter('active')">
+        Active
+      </button>
+      <button type="button" [class.active]="store.currentFilter() === 'completed'"
+        (click)="store.setFilter('completed')">
+        Completed
+      </button>
+    </nav>
+    <section class="todo-list" *ngIf="store.filteredTodos().length; else emptyState">
       <ul>
-        @for (todo of store.todos(); track todo.id) {
+        @for (todo of store.filteredTodos(); track todo.id) {
         <li [class.completed]="todo.completed">
           <label>
             <input type="checkbox" [checked]="todo.completed" (change)="store.toggleTodo(todo.id)" />

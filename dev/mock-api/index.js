@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
 const todos = [
   { id: 1, text: "Walk the dog in the park", completed: false },
