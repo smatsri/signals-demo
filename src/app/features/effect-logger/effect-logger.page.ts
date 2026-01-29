@@ -22,8 +22,7 @@ export class EffectLoggerPage {
         this.value();
         this.lastRun.set(new Date());
         this.runCount.update(c => c + 1);
-      },
-      { allowSignalWrites: true }
+      }
     );
   }
 
