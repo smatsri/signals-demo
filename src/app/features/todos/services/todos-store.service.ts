@@ -1,7 +1,7 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { TodosService } from './todos.service';
-import { Todo } from '../models/todo.model';
+import { Todo, type TodoFilter } from '../models/todo.model';
 import { mutation } from '../../../shared/utils/mutation';
 
 @Injectable()
@@ -10,6 +10,7 @@ export class TodosStore {
 
   // ─── STATE ─────────────────────────────────────────────
   readonly newTodoText = signal('');
+  private readonly filter = signal<TodoFilter>('all');
 
   // ─── DATA FETCHING ─────────────────────────────────────
   readonly todosResource = rxResource({
@@ -26,6 +27,18 @@ export class TodosStore {
 
   // ─── SELECTORS ─────────────────────────────────────────
   readonly todos = computed(() => this.todosResource.value());
+
+  readonly filteredTodos = computed(() => {
+    const list = this.todos();
+    const f = this.filter();
+    return f === 'all'
+      ? list
+      : f === 'active'
+        ? list.filter(t => !t.completed)
+        : list.filter(t => t.completed);
+  });
+
+  readonly currentFilter = this.filter.asReadonly();
 
   readonly remainingCount = computed(() =>
     this.todos().filter(t => !t.completed).length
@@ -48,6 +61,10 @@ export class TodosStore {
   );
 
   // ─── ACTIONS ───────────────────────────────────────────
+  setFilter(value: TodoFilter): void {
+    this.filter.set(value);
+  }
+
   async addTodo(): Promise<void> {
     const text = this.newTodoText().trim();
     if (!text) return;
