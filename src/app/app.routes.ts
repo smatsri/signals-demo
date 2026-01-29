@@ -18,4 +18,9 @@ export const routes: Routes = [
         (m) => m.EffectLoggerPage
       ),
   },
+  {
+    path: 'contact',
+    loadComponent: () =>
+      import('./features/contact/contact.page').then((m) => m.ContactPage),
+  },
 ];

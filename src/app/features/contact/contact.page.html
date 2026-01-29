@@ -1,0 +1,65 @@
+<main class="contact-page">
+  <section class="contact-card">
+    <header class="contact-header">
+      <h1>Contact (forms + signals)</h1>
+      <p>
+        Reactive Forms with <code>toSignal()</code> and <code>computed()</code>.
+        Draft is persisted to localStorage via <code>effect()</code>.
+      </p>
+    </header>
+
+    @if (submitted()) {
+    <div class="contact-thanks" role="status">
+      <p><strong>Thanks!</strong> We got your message.</p>
+      @if (lastPayload(); as payload) {
+      <p class="contact-summary">
+        From {{ payload.name }} &lt;{{ payload.email }}&gt;
+      </p>
+      }
+      <button type="button" class="contact-btn" (click)="sendAnother()">
+        Send another
+      </button>
+    </div>
+    } @else {
+    <form class="contact-form" (submit)="$event.preventDefault(); submit()" [formGroup]="form">
+      <label class="contact-field">
+        <span>Name</span>
+        <input type="text" formControlName="name" placeholder="Your name" />
+        @if (form.controls.name.invalid && form.controls.name.touched) {
+        <span class="contact-error">Name is required.</span>
+        }
+      </label>
+      <label class="contact-field">
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="you@example.com" />
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+        <span class="contact-error">Valid email is required.</span>
+        }
+      </label>
+      <label class="contact-field">
+        <span>Phone <em>(optional)</em></span>
+        <input type="tel" formControlName="phone" placeholder="+1 234 567 8900" />
+      </label>
+      <label class="contact-field">
+        <span>Message</span>
+        <textarea formControlName="message" rows="4" placeholder="At least 10 characters..."></textarea>
+        <span class="contact-meta">Characters: {{ messageLength() }} (min 10)</span>
+        @if (form.controls.message.invalid && form.controls.message.touched) {
+        <span class="contact-error">Message must be at least 10 characters.</span>
+        }
+      </label>
+      <div class="contact-actions">
+        <button type="submit" [disabled]="!isFormValid()">
+          Send
+        </button>
+      </div>
+    </form>
+    }
+
+    <footer class="contact-footer">
+      <a routerLink="/">Todos</a>
+      <a routerLink="/counter">Counter</a>
+      <a routerLink="/effect-logger">Effect logger</a>
+    </footer>
+  </section>
+</main>
