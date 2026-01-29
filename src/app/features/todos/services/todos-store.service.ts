@@ -2,6 +2,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { TodosService } from './todos.service';
 import { Todo, type TodoFilter } from '../models/todo.model';
+import { TodoDomain } from '../domain/todo-domain';
 import { mutation } from '../../../shared/utils/mutation';
 
 @Injectable()
@@ -72,7 +73,7 @@ export class TodosStore {
     await this.addTodoMutation.run(
       () => this.todosService.addTodo(text),
       todo => {
-        this.todosResource.update(prev => [...prev, todo]);
+        this.todosResource.update(prev => TodoDomain.add(prev, todo));
         this.newTodoText.set('');
       },
       'Failed to add todo'
@@ -86,11 +87,7 @@ export class TodosStore {
     await this.toggleTodoMutation.run(
       () => this.todosService.setCompleted(id, !todo.completed),
       () => {
-        this.todosResource.update(prev =>
-          prev.map(t =>
-            t.id === id ? { ...t, completed: !t.completed } : t
-          )
-        );
+        this.todosResource.update(prev => TodoDomain.toggle(prev, id));
       },
       'Failed to update todo'
     );
@@ -100,9 +97,7 @@ export class TodosStore {
     await this.removeTodoMutation.run(
       () => this.todosService.removeTodo(id),
       () => {
-        this.todosResource.update(prev =>
-          prev.filter(t => t.id !== id)
-        );
+        this.todosResource.update(prev => TodoDomain.remove(prev, id));
       },
       'Failed to remove todo'
     );
@@ -112,9 +107,7 @@ export class TodosStore {
     await this.clearCompletedMutation.run(
       () => this.todosService.clearCompleted(),
       () => {
-        this.todosResource.update(prev =>
-          prev.filter(t => !t.completed)
-        );
+        this.todosResource.update(prev => TodoDomain.clearCompleted(prev));
       },
       'Failed to clear completed todos'
     );

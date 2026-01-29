@@ -1,0 +1,19 @@
+<main class="counter-page">
+  <section class="counter-card">
+    <header class="counter-header">
+      <h1>Counter + effect()</h1>
+      <p>One signal, one effect. Count is persisted to localStorage whenever it changes.</p>
+    </header>
+    <div class="counter-display">
+      <span class="count">{{ count() }}</span>
+    </div>
+    <div class="counter-actions">
+      <button type="button" (click)="decrement()">−</button>
+      <button type="button" (click)="increment()">+</button>
+    </div>
+    <footer class="counter-footer">
+      <a routerLink="/">Todos</a>
+      <a routerLink="/effect-logger">Effect logger</a>
+    </footer>
+  </section>
+</main>
