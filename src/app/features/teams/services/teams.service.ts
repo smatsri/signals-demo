@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 
 import { Team } from '../team.model';
 
 const API_URL =
   'https://www.thesportsdb.com/api/v1/json/123/search_all_teams.php?l=NBA';
+const TEAM_LOOKUP_URL =
+  'https://www.thesportsdb.com/api/v1/json/123/lookupteam.php?id=';
 
 interface TheSportsDbTeam {
   idTeam: string;
@@ -49,6 +51,15 @@ export class TeamsService {
         .get<TheSportsDbResponse>(API_URL)
         .pipe(map((res) => (res.teams ?? []).map(mapToTeam))),
   });
+
+  getTeamById(id: string): Observable<Team | null> {
+    return this.http.get<TheSportsDbResponse>(`${TEAM_LOOKUP_URL}${id}`).pipe(
+      map((res) => {
+        const first = res.teams?.[0];
+        return first ? mapToTeam(first) : null;
+      })
+    );
+  }
 
   readonly errorMessage = computed(() => {
     const err = this.teamsResource.error();

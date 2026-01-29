@@ -11,25 +11,28 @@
   } @else {
   <div class="teams-grid">
     @for (team of teamsService.teamsResource.value(); track team.id) {
-    <article class="team-card">
-      <div class="team-card-image">
-        @if (team.fanartUrl) {
-        <img [src]="team.fanartUrl" [alt]="team.name" loading="lazy" />
-        } @else if (team.badgeUrl) {
-        <img [src]="team.badgeUrl" [alt]="team.name" loading="lazy" />
-        } @else {
-        <div class="team-card-placeholder">No image</div>
-        }
-      </div>
-      <div class="team-card-body">
-        <h2 class="team-card-name">{{ team.name }}</h2>
-        <p class="team-card-meta">{{ team.stadium }}</p>
-        <p class="team-card-meta">{{ team.location }}</p>
-        @if (team.description) {
-        <p class="team-card-desc">{{ team.description | slice:0:160 }}{{ team.description.length > 160 ? '…' : '' }}</p>
-        }
-      </div>
-    </article>
+    <a [routerLink]="['/teams', team.id]" class="team-card-link">
+      <article class="team-card">
+        <div class="team-card-image">
+          @if (team.fanartUrl) {
+          <img [src]="team.fanartUrl" [alt]="team.name" loading="lazy" />
+          } @else if (team.badgeUrl) {
+          <img [src]="team.badgeUrl" [alt]="team.name" loading="lazy" />
+          } @else {
+          <div class="team-card-placeholder">No image</div>
+          }
+        </div>
+        <div class="team-card-body">
+          <h2 class="team-card-name">{{ team.name }}</h2>
+          <p class="team-card-meta">{{ team.stadium }}</p>
+          <p class="team-card-meta">{{ team.location }}</p>
+          @if (team.description) {
+          <p class="team-card-desc">{{ team.description | slice:0:160 }}{{ team.description.length > 160 ? '…' : '' }}
+          </p>
+          }
+        </div>
+      </article>
+    </a>
     }
   </div>
   }
