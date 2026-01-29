@@ -2,5 +2,10 @@
   <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Todos</a>
   <a routerLink="/counter" routerLinkActive="active">Counter</a>
   <a routerLink="/effect-logger" routerLinkActive="active">Effect logger</a>
+  <button type="button" class="app-nav-theme" (click)="themeStore.cyclePreference()"
+    [attr.aria-label]="'Theme: ' + themeStore.effectiveTheme() + '. Click to cycle.'"
+    [title]="'Theme: ' + themeStore.preference()">
+    {{ themeStore.effectiveTheme() === 'dark' ? '☀️' : '🌙' }}
+  </button>
 </nav>
 <router-outlet></router-outlet>
