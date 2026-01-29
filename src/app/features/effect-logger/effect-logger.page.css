@@ -1,0 +1,126 @@
+.effect-logger-page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.effect-logger-card {
+  max-width: 420px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.effect-logger-header {
+  padding: 1.75rem 1.5rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.effect-logger-header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.effect-logger-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.effect-logger-controls {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.effect-logger-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.effect-logger-controls label span {
+  font-weight: 500;
+}
+
+.effect-logger-controls input[type="text"] {
+  padding: 0.65rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #fff;
+  color: #111827;
+}
+
+.value-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.value-row button {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #0f3460, #16213e);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.value-row button:hover {
+  transform: translateY(-1px);
+}
+
+.value-display {
+  min-width: 2rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #0f3460;
+}
+
+.effect-logger-output {
+  padding: 1rem 1.5rem;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.effect-logger-output p {
+  margin: 0 0 0.5rem;
+}
+
+.effect-logger-output p:last-child {
+  margin-bottom: 0;
+}
+
+.effect-logger-footer {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+}
+
+.effect-logger-footer a {
+  color: #0f3460;
+  text-decoration: none;
+}
+
+.effect-logger-footer a:hover {
+  text-decoration: underline;
+}

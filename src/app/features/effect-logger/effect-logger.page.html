@@ -1,0 +1,30 @@
+<main class="effect-logger-page">
+  <section class="effect-logger-card">
+    <header class="effect-logger-header">
+      <h1>Effect run logger</h1>
+      <p>Change the signals below. The effect runs whenever they change and updates the timestamp and run count.</p>
+    </header>
+    <div class="effect-logger-controls">
+      <label>
+        <span>Name</span>
+        <input type="text" [value]="name()" (input)="setName($any($event.target).value)" placeholder="Type something" />
+      </label>
+      <label>
+        <span>Value</span>
+        <div class="value-row">
+          <button type="button" (click)="decrementValue()">−</button>
+          <span class="value-display">{{ value() }}</span>
+          <button type="button" (click)="incrementValue()">+</button>
+        </div>
+      </label>
+    </div>
+    <div class="effect-logger-output">
+      <p><strong>Effect run count:</strong> {{ runCount() }}</p>
+      <p><strong>Last run:</strong> {{ lastRun() ? (lastRun() | date:'medium') : '—' }}</p>
+    </div>
+    <footer class="effect-logger-footer">
+      <a routerLink="/">Todos</a>
+      <a routerLink="/counter">Counter</a>
+    </footer>
+  </section>
+</main>
