@@ -23,4 +23,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/contact/contact.page').then((m) => m.ContactPage),
   },
+  {
+    path: 'teams',
+    loadComponent: () =>
+      import('./features/teams/teams.page').then((m) => m.TeamsPage),
+  },
 ];
