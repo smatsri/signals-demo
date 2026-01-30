@@ -12,46 +12,17 @@ const indexHtml = join(serverDistFolder, 'index.server.html');
 const app = express();
 const commonEngine = new CommonEngine();
 
-app.use(express.json());
-
-const todos: { id: number; text: string; completed: boolean }[] = [
-  { id: 1, text: 'Walk the dog in the park', completed: false },
-  { id: 2, text: 'Finish reading a chapter of my book', completed: false },
-  { id: 3, text: 'Call Mom and check in', completed: false },
-];
-
-app.get('/api/todos', (_req, res) => {
-  res.json(todos);
-});
-
-app.post('/api/todos', (req, res) => {
-  const todo = { id: todos.length + 1, text: req.body.text, completed: false };
-  todos.push(todo);
-  res.json(todo);
-});
-
-app.patch('/api/todos/:id', (req, res) => {
-  const todo = todos.find((t) => t.id === parseInt(req.params['id'], 10));
-  if (todo) {
-    todo.completed = req.body.completed;
-    res.json(todo);
-  } else {
-    res.status(404).json({ message: 'Todo not found' });
-  }
-});
-
-app.delete('/api/todos/:id', (req, res) => {
-  const index = todos.findIndex((t) => t.id === parseInt(req.params['id'], 10));
-  if (index !== -1) {
-    todos.splice(index, 1);
-  }
-  res.json({ message: 'Todo deleted' });
-});
-
-app.delete('/api/todos', (_req, res) => {
-  todos.length = 0;
-  res.json({ message: 'All todos deleted' });
-});
+/**
+ * Example Express Rest API endpoints can be defined here.
+ * Uncomment and define endpoints as necessary.
+ *
+ * Example:
+ * ```ts
+ * app.get('/api/**', (req, res) => {
+ *   // Handle API request
+ * });
+ * ```
+ */
 
 /**
  * Serve static files from /browser
