@@ -1,59 +1,65 @@
-# SignalsDemo
+# signals-demo
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.19.
+Angular 19 app demonstrating **signals**, signal-based stores, and modern reactive patterns.
+
+## Features
+
+- **Todos** – todo list with signal store
+- **Counter** – simple counter with signals
+- **Effect logger** – `effect()` usage and logging
+- **Greeter** – input-bound greeting with signals
+- **Contact** – contact form demo
+- **Teams** – team list and detail (uses mock API)
+
+## Project structure
+
+- `src/app/core/` – app-wide infrastructure (layout, notifications, theme stores)
+- `src/app/shared/` – reusable UI and utilities (e.g. notifications list)
+- `src/app/features/` – one folder per feature (todos, counter, greeter, teams, etc.)
 
 ## Development server
 
-To start a local development server, run:
-
 ```bash
+npm start
+# or
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open [http://localhost:4200](http://localhost:4200). The app reloads on file changes.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+For **Teams** (and any `/api` calls), run the mock API in another terminal:
 
 ```bash
-ng generate component component-name
+cd dev/mock-api && npm install && npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The app proxies `/api` to `http://localhost:3000` (see `proxy.conf.json`). Use `ng serve` with the default config so the proxy is applied.
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Build
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Output goes to `dist/`. Production build is optimized by default.
 
-## Running unit tests
+## SSR
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+After building:
+
+```bash
+npm run serve:ssr:signals-demo
+```
+
+## Tests
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+Runs unit tests with Karma.
 
-For end-to-end (e2e) testing, run:
+## Resources
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular CLI](https://angular.dev/tools/cli)
+- [Angular Signals](https://angular.dev/guide/signals)
