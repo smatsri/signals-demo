@@ -1,0 +1,30 @@
+.greeter-card {
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.greeter-greeting {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.greeter-wave {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  background: linear-gradient(135deg, #0f3460, #16213e);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.greeter-wave:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 52, 96, 0.35);
+}

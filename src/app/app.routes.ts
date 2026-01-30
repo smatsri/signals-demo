@@ -19,6 +19,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'greeter',
+    loadComponent: () =>
+      import('./features/greeter/greeter.page').then((m) => m.GreeterPage),
+  },
+  {
     path: 'contact',
     loadComponent: () =>
       import('./features/contact/contact.page').then((m) => m.ContactPage),
