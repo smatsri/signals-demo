@@ -113,22 +113,3 @@
   color: #4b5563;
   line-height: 1.45;
 }
-
-.teams-footer {
-  max-width: 1100px;
-  margin: 2rem auto 0;
-  padding: 1rem 0.5rem;
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  font-size: 0.875rem;
-}
-
-.teams-footer a {
-  color: rgba(255, 255, 255, 0.9);
-  text-decoration: none;
-}
-
-.teams-footer a:hover {
-  text-decoration: underline;
-}

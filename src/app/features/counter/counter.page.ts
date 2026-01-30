@@ -1,12 +1,10 @@
-import { Component, effect, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, effect, signal } from '@angular/core';
 
 const COUNTER_STORAGE_KEY = 'signals-demo-counter';
 
 @Component({
   selector: 'app-counter-page',
   standalone: true,
-  imports: [RouterLink],
   templateUrl: './counter.page.html',
   styleUrl: './counter.page.css',
 })

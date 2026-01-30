@@ -5,41 +5,14 @@ alwaysApply: true
 
 ### Commit message format
 
-Use a Conventional Commits–style format:
+Use a short Conventional Commits–style line:
 
 ```text
 <type>(optional-scope): <short, imperative summary>
-
-<detailed body, wrapped at ~72 chars>
-
-optional footer sections (e.g. Breaking Changes, issue links)
 ```
 
-- **Allowed types**: `feat`, `fix`, `chore`, `refactor`, `docs`, `test`, `build`, `ci`.
-- **Scope**: optional, use kebab-case (e.g. `todos`, `auth-api`, `routing`).
-- **Summary line**:
-  - Max ~72 chars.
-  - Imperative mood (e.g. "add todos page", "fix routing bug").
-  - No trailing period.
+- **Types**: `feat`, `fix`, `chore`, `refactor`, `docs`, `test`, `build`, `ci`.
+- **Scope**: optional, kebab-case (e.g. `todos`, `auth-api`).
+- **Summary**: imperative, no trailing period. Keep it brief.
 
-### Body and footer
-
-- **Body**:
-  - Explain the _why_ and any important _how_ decisions.
-  - Use bullet points if helpful.
-  - Wrap lines at ~72 chars.
-
-- **Breaking changes**:
-  - Add a footer section when relevant:
-
-    ```text
-    BREAKING CHANGE: description of what changed and migration steps
-    ```
-
-- **Issue references**:
-  - Reference work items in the footer, e.g.:
-
-    ```text
-    Closes #123
-    Related to #456
-    ```
+No body or footer required.

@@ -5,7 +5,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 const CONTACT_DRAFT_KEY = 'signals-demo-contact-draft';
@@ -31,7 +30,7 @@ function getStoredDraft(): Partial<ContactPayload> {
 @Component({
   selector: 'app-contact-page',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './contact.page.html',
   styleUrl: './contact.page.css',
 })

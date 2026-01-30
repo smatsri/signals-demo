@@ -1,11 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { Component, effect, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-
 @Component({
   selector: 'app-effect-logger-page',
   standalone: true,
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe],
   templateUrl: './effect-logger.page.html',
   styleUrl: './effect-logger.page.css',
 })
