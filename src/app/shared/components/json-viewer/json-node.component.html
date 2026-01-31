@@ -24,8 +24,9 @@
       }
     </span>
     @if (!isCollapsed(path())) {
+      @let children = getChildren(node());
       <div class="json-node-children">
-        @for (child of getChildren(node()); track childPath(child)) {
+        @for (child of children; track childPath(child)) {
           <app-json-node
             [node]="child"
             [path]="childPath(child)"
@@ -35,12 +36,10 @@
           />
         }
       </div>
-      @if (getChildren(node()).length > 0) {
-        <span class="json-node-line json-node-closing" [style.--depth]="depth()">
-          <span class="json-node-toggle-spacer" aria-hidden="true"></span>
-          <span class="json-node-bracket">{{ node().type === 'object' ? '}' : ']' }}</span>
-        </span>
-      }
+      <span class="json-node-line json-node-closing" [style.--depth]="depth()">
+        <span class="json-node-toggle-spacer" aria-hidden="true"></span>
+        <span class="json-node-bracket">{{ node().type === 'object' ? '}' : ']' }}</span>
+      </span>
     }
   </div>
 } @else {
@@ -51,7 +50,7 @@
         <span class="json-node-key">"{{ node().key }}"</span>
         <span class="json-node-colon">: </span>
       }
-      @let valueView = node() | jsonValueView;
+      @let valueView = getValueView(node());
       @switch (valueView.kind) {
         @case ('url') {
           <a

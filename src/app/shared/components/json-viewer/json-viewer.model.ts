@@ -13,6 +13,7 @@ export type TreeNode =
       type: PrimitiveType;
       value: string | number | boolean | null;
       valueHint?: ValueHint;
+      valueView: JsonValueView;
     }
   | {
       key: string | null;
@@ -29,21 +30,40 @@ function getValueHint(str: string): ValueHint | undefined {
   return undefined;
 }
 
+function getValueView(
+  type: PrimitiveType,
+  value: string | number | boolean | null,
+  valueHint?: ValueHint
+): JsonValueView {
+  if (type !== 'string') {
+    return { kind: 'default' };
+  }
+  const str = value as string;
+  if (valueHint === 'url' || URL_PATTERN.test(str)) {
+    return { kind: 'url', href: str };
+  }
+  if (valueHint === 'date') {
+    return { kind: 'date' };
+  }
+  return { kind: 'default' };
+}
+
 function buildNode(key: string | null, value: unknown): TreeNode {
   if (value === null) {
-    return { key, type: 'null', value: null };
+    return { key, type: 'null', value: null, valueView: { kind: 'default' } };
   }
   if (typeof value === 'boolean') {
-    return { key, type: 'boolean', value };
+    return { key, type: 'boolean', value, valueView: { kind: 'default' } };
   }
   if (typeof value === 'number') {
-    return { key, type: 'number', value };
+    return { key, type: 'number', value, valueView: { kind: 'default' } };
   }
   if (typeof value === 'string') {
     const valueHint = getValueHint(value);
+    const valueView = getValueView('string', value, valueHint);
     return valueHint
-      ? { key, type: 'string', value, valueHint }
-      : { key, type: 'string', value };
+      ? { key, type: 'string', value, valueHint, valueView }
+      : { key, type: 'string', value, valueView };
   }
   if (Array.isArray(value)) {
     const children: TreeNode[] = value.map((item, i) =>
@@ -57,7 +77,7 @@ function buildNode(key: string | null, value: unknown): TreeNode {
     );
     return { key, type: 'object', children };
   }
-  return { key, type: 'null', value: null };
+  return { key, type: 'null', value: null, valueView: { kind: 'default' } };
 }
 
 export type ParseResult = { tree: TreeNode } | { error: string };

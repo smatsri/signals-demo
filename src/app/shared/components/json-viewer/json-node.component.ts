@@ -6,15 +6,14 @@ import {
   type Signal,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import type { TreeNode } from './json-viewer.model';
-import { JsonValueViewPipe } from './json-value-view.pipe';
+import type { JsonValueView, TreeNode } from './json-viewer.model';
 
 @Component({
   selector: 'app-json-node',
   standalone: true,
   templateUrl: './json-node.component.html',
   styleUrl: './json-node.component.css',
-  imports: [forwardRef(() => JsonNodeComponent), JsonValueViewPipe],
+  imports: [forwardRef(() => JsonNodeComponent)],
 })
 export class JsonNodeComponent {
   private readonly sanitizer = inject(DomSanitizer);
@@ -46,6 +45,14 @@ export class JsonNodeComponent {
 
   protected getChildren(node: TreeNode): TreeNode[] {
     return node.type === 'object' || node.type === 'array' ? node.children : [];
+  }
+
+  protected getValueView(node: TreeNode): JsonValueView {
+    if (node.type === 'object' || node.type === 'array') {
+      return { kind: 'default' };
+    }
+    const valueView = (node as Extract<TreeNode, { valueView: JsonValueView }>).valueView;
+    return valueView ?? { kind: 'default' };
   }
 
   protected formatValue(node: TreeNode): string {
