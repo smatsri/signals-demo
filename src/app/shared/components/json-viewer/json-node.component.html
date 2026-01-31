@@ -2,7 +2,7 @@
 <div class="json-node json-node--expandable" [style.--depth]="node().depth">
   <span class="json-node-line">
     @if (node().path !== '') {
-    <button type="button" class="json-node-toggle" (click)="toggle()(node().path)"
+    <button type="button" class="json-node-toggle" (click)="pathToggled.emit(node().path)"
       [attr.aria-label]="isCollapsed() ? 'Expand' : 'Collapse'" [attr.aria-expanded]="!isCollapsed()">
       {{ isCollapsed() ? '+' : '−' }}
     </button>
@@ -21,7 +21,7 @@
   @if (!isCollapsed()) {
   <div class="json-node-children">
     @for (child of children(); track child.path) {
-    <app-json-node [node]="child" [collapsedPaths]="collapsedPaths()" [toggle]="toggle()" />
+    <app-json-node [node]="child" [collapsedPaths]="collapsedPaths()" (pathToggled)="pathToggled.emit($event)" />
     }
   </div>
   <span class="json-node-line json-node-closing" [style.--depth]="node().depth">

@@ -4,6 +4,7 @@ import {
   forwardRef,
   inject,
   input,
+  output,
   type Signal,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -20,7 +21,7 @@ export class JsonNodeComponent {
   private readonly sanitizer = inject(DomSanitizer);
   readonly node = input.required<TreeNode>();
   readonly collapsedPaths = input.required<Signal<Set<string>>>();
-  readonly toggle = input.required<(path: string) => void>();
+  readonly pathToggled = output<string>();
 
   readonly isExpandable = computed(
     () => this.node().type === 'object' || this.node().type === 'array'

@@ -1,7 +1,7 @@
 @if (invalidError()) {
 <p class="json-viewer-error" role="alert">{{ invalidError() }}</p>
-} @else if (rootNode()) {
+} @else if (rootNode(); as node) {
 <div class="json-viewer-tree">
-  <app-json-node [node]="rootNode()!" [collapsedPaths]="collapsedPaths" [toggle]="toggle.bind(this)" />
+  <app-json-node [node]="node" [collapsedPaths]="collapsedPaths" (pathToggled)="toggle($event)" />
 </div>
 }
