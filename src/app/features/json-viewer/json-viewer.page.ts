@@ -9,5 +9,28 @@ import { JsonViewerComponent } from '../../shared/components/json-viewer/json-vi
   imports: [JsonViewerComponent],
 })
 export class JsonViewerPage {
-  protected readonly jsonInput = signal('');
+
+  readonly exampleJsonString = `
+  {
+  "user": {
+    "id": 42,
+    "name": "Ada",
+    "roles": ["admin", "editor"],
+    "profile": {
+      "age": 31,
+      "country": "UK"
+    }
+  },
+  "settings": {
+    "theme": "dark",
+    "notifications": {
+      "email": true,
+      "sms": false
+    }
+  },
+  "lastLogin": "2026-01-30T18:45:12Z"
+}
+
+  `;
+  readonly jsonInput = signal(this.exampleJsonString);
 }

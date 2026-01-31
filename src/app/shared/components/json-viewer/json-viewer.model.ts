@@ -9,17 +9,21 @@ export type JsonValueView =
 
 export type TreeNode =
   | {
-      key: string | null;
-      type: PrimitiveType;
-      value: string | number | boolean | null;
-      valueHint?: ValueHint;
-      valueView: JsonValueView;
-    }
+    key: string | null;
+    path: string;
+    depth: number;
+    type: PrimitiveType;
+    value: string | number | boolean | null;
+    valueHint?: ValueHint;
+    valueView: JsonValueView;
+  }
   | {
-      key: string | null;
-      type: 'object' | 'array';
-      children: TreeNode[];
-    };
+    key: string | null;
+    path: string;
+    depth: number;
+    type: 'object' | 'array';
+    children: TreeNode[];
+  };
 
 const URL_PATTERN = /^https?:\/\/\S+$/;
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}/;
@@ -48,36 +52,36 @@ function getValueView(
   return { kind: 'default' };
 }
 
-function buildNode(key: string | null, value: unknown): TreeNode {
+function buildNode(key: string | null, value: unknown, path: string, depth: number): TreeNode {
   if (value === null) {
-    return { key, type: 'null', value: null, valueView: { kind: 'default' } };
+    return { key, path, depth, type: 'null', value: null, valueView: { kind: 'default' } };
   }
   if (typeof value === 'boolean') {
-    return { key, type: 'boolean', value, valueView: { kind: 'default' } };
+    return { key, path, depth, type: 'boolean', value, valueView: { kind: 'default' } };
   }
   if (typeof value === 'number') {
-    return { key, type: 'number', value, valueView: { kind: 'default' } };
+    return { key, path, depth, type: 'number', value, valueView: { kind: 'default' } };
   }
   if (typeof value === 'string') {
     const valueHint = getValueHint(value);
     const valueView = getValueView('string', value, valueHint);
     return valueHint
-      ? { key, type: 'string', value, valueHint, valueView }
-      : { key, type: 'string', value, valueView };
+      ? { key, path, depth, type: 'string', value, valueHint, valueView }
+      : { key, path, depth, type: 'string', value, valueView };
   }
   if (Array.isArray(value)) {
     const children: TreeNode[] = value.map((item, i) =>
-      buildNode(String(i), item)
+      buildNode(String(i), item, path, depth + 1)
     );
-    return { key, type: 'array', children };
+    return { key, path, depth, type: 'array', children };
   }
   if (typeof value === 'object' && value !== null) {
     const children: TreeNode[] = Object.entries(value).map(([k, v]) =>
-      buildNode(k, v)
+      buildNode(k, v, path, depth + 1)
     );
-    return { key, type: 'object', children };
+    return { key, path, depth, type: 'object', children };
   }
-  return { key, type: 'null', value: null, valueView: { kind: 'default' } };
+  return { key, path, depth, type: 'null', value: null, valueView: { kind: 'default' } };
 }
 
 export type ParseResult = { tree: TreeNode } | { error: string };
@@ -92,7 +96,7 @@ export function parseJsonToTree(jsonString: string): ParseResult {
   }
   try {
     const parsed: unknown = JSON.parse(trimmed);
-    return { tree: buildNode(null, parsed) };
+    return { tree: buildNode(null, parsed, '', 0) };
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     return { error: `Invalid JSON: ${message}` };

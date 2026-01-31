@@ -18,7 +18,6 @@ import type { JsonValueView, TreeNode } from './json-viewer.model';
 })
 export class JsonNodeComponent {
   private readonly sanitizer = inject(DomSanitizer);
-
   readonly node = input.required<TreeNode>();
   readonly path = input.required<string>();
   readonly depth = input<number>(0);
