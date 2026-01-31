@@ -1,24 +1,33 @@
 import {
   Component,
   forwardRef,
+  inject,
   input,
   type Signal,
 } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import type { TreeNode } from './json-viewer.model';
+import { JsonValueViewPipe } from './json-value-view.pipe';
 
 @Component({
   selector: 'app-json-node',
   standalone: true,
   templateUrl: './json-node.component.html',
   styleUrl: './json-node.component.css',
-  imports: [forwardRef(() => JsonNodeComponent)],
+  imports: [forwardRef(() => JsonNodeComponent), JsonValueViewPipe],
 })
 export class JsonNodeComponent {
+  private readonly sanitizer = inject(DomSanitizer);
+
   readonly node = input.required<TreeNode>();
   readonly path = input.required<string>();
   readonly depth = input<number>(0);
   readonly collapsedPaths = input.required<Signal<Set<string>>>();
   readonly toggle = input.required<(path: string) => void>();
+
+  protected safeUrl(href: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(href);
+  }
 
   protected childPath(child: TreeNode): string {
     const p = this.path();

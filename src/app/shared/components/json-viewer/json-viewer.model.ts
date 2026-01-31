@@ -1,16 +1,33 @@
 export type PrimitiveType = 'string' | 'number' | 'boolean' | 'null';
 
+export type ValueHint = 'url' | 'date';
+
+export type JsonValueView =
+  | { kind: 'url'; href: string }
+  | { kind: 'date' }
+  | { kind: 'default' };
+
 export type TreeNode =
   | {
       key: string | null;
       type: PrimitiveType;
       value: string | number | boolean | null;
+      valueHint?: ValueHint;
     }
   | {
       key: string | null;
       type: 'object' | 'array';
       children: TreeNode[];
     };
+
+const URL_PATTERN = /^https?:\/\/\S+$/;
+const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}/;
+
+function getValueHint(str: string): ValueHint | undefined {
+  if (URL_PATTERN.test(str)) return 'url';
+  if (ISO_DATE_PATTERN.test(str)) return 'date';
+  return undefined;
+}
 
 function buildNode(key: string | null, value: unknown): TreeNode {
   if (value === null) {
@@ -23,7 +40,10 @@ function buildNode(key: string | null, value: unknown): TreeNode {
     return { key, type: 'number', value };
   }
   if (typeof value === 'string') {
-    return { key, type: 'string', value };
+    const valueHint = getValueHint(value);
+    return valueHint
+      ? { key, type: 'string', value, valueHint }
+      : { key, type: 'string', value };
   }
   if (Array.isArray(value)) {
     const children: TreeNode[] = value.map((item, i) =>

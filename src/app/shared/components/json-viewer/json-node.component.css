@@ -55,6 +55,15 @@
   color: #0d9488;
 }
 
+.json-node-value--url {
+  color: #0d9488;
+  text-decoration: underline;
+}
+
+.json-node-value--url:hover {
+  text-decoration-thickness: 2px;
+}
+
 .json-node-value--number {
   color: #7c3aed;
 }

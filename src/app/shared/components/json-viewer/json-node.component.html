@@ -51,7 +51,23 @@
         <span class="json-node-key">"{{ node().key }}"</span>
         <span class="json-node-colon">: </span>
       }
-      <span class="json-node-value json-node-value--{{ node().type }}">{{ formatValue(node()) }}</span>
+      @let valueView = node() | jsonValueView;
+      @switch (valueView.kind) {
+        @case ('url') {
+          <a
+            [href]="safeUrl(valueView.href)"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="json-node-value json-node-value--url"
+          >{{ valueView.href }}</a>
+        }
+        @case ('date') {
+          <span class="json-node-value json-node-value--{{ node().type }}">{{ formatValue(node()) }}</span>
+        }
+        @default {
+          <span class="json-node-value json-node-value--{{ node().type }}">{{ formatValue(node()) }}</span>
+        }
+      }
     </span>
   </div>
 }
