@@ -1,72 +1,55 @@
-@if (isExpandable(node())) {
-  <div class="json-node json-node--expandable" [style.--depth]="depth()">
-    <span class="json-node-line">
-      @if (path() !== '') {
-        <button
-          type="button"
-          class="json-node-toggle"
-          (click)="toggle()(path())"
-          [attr.aria-label]="isCollapsed(path()) ? 'Expand' : 'Collapse'"
-          [attr.aria-expanded]="!isCollapsed(path())"
-        >
-          {{ isCollapsed(path()) ? '+' : '−' }}
-        </button>
-      } @else {
-        <span class="json-node-toggle-spacer" aria-hidden="true"></span>
-      }
-      @if (node().key !== null) {
-        <span class="json-node-key">"{{ node().key }}"</span>
-        <span class="json-node-colon">: </span>
-      }
-      <span class="json-node-bracket">{{ node().type === 'object' ? '{' : '[' }}</span>
-      @if (isCollapsed(path())) {
-        <span class="json-node-ellipsis">{{ node().type === 'object' ? '…}' : '…]' }}</span>
-      }
-    </span>
-    @if (!isCollapsed(path())) {
-      @let children = getChildren(node());
-      <div class="json-node-children">
-        @for (child of children; track childPath(child)) {
-          <app-json-node
-            [node]="child"
-            [path]="childPath(child)"
-            [depth]="depth() + 1"
-            [collapsedPaths]="collapsedPaths()"
-            [toggle]="toggle()"
-          />
-        }
-      </div>
-      <span class="json-node-line json-node-closing" [style.--depth]="depth()">
-        <span class="json-node-toggle-spacer" aria-hidden="true"></span>
-        <span class="json-node-bracket">{{ node().type === 'object' ? '}' : ']' }}</span>
-      </span>
+@if (isExpandable()) {
+<div class="json-node json-node--expandable" [style.--depth]="node().depth">
+  <span class="json-node-line">
+    @if (node().path !== '') {
+    <button type="button" class="json-node-toggle" (click)="pathToggled.emit(node().path)"
+      [attr.aria-label]="isCollapsed() ? 'Expand' : 'Collapse'" [attr.aria-expanded]="!isCollapsed()">
+      {{ isCollapsed() ? '+' : '−' }}
+    </button>
+    } @else {
+    <span class="json-node-toggle-spacer" aria-hidden="true"></span>
+    }
+    @if (node().key !== null) {
+    <span class="json-node-key">"{{ node().key }}"</span>
+    <span class="json-node-colon">: </span>
+    }
+    <span class="json-node-bracket">{{ node().type === 'object' ? '{' : '[' }}</span>
+    @if (isCollapsed()) {
+    <span class="json-node-ellipsis">{{ node().type === 'object' ? '…}' : '…]' }}</span>
+    }
+  </span>
+  @if (!isCollapsed()) {
+  <div class="json-node-children">
+    @for (child of children(); track child.path) {
+    <app-json-node [node]="child" [collapsedPaths]="collapsedPaths()" (pathToggled)="pathToggled.emit($event)" />
     }
   </div>
+  <span class="json-node-line json-node-closing" [style.--depth]="node().depth">
+    <span class="json-node-toggle-spacer" aria-hidden="true"></span>
+    <span class="json-node-bracket">{{ node().type === 'object' ? '}' : ']' }}</span>
+  </span>
+  }
+</div>
 } @else {
-  <div class="json-node json-node--primitive" [style.--depth]="depth()">
-    <span class="json-node-line">
-      <span class="json-node-toggle-spacer" aria-hidden="true"></span>
-      @if (node().key !== null) {
-        <span class="json-node-key">"{{ node().key }}"</span>
-        <span class="json-node-colon">: </span>
-      }
-      @let valueView = getValueView(node());
-      @switch (valueView.kind) {
-        @case ('url') {
-          <a
-            [href]="safeUrl(valueView.href)"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="json-node-value json-node-value--url"
-          >{{ valueView.href }}</a>
-        }
-        @case ('date') {
-          <span class="json-node-value json-node-value--{{ node().type }}">{{ formatValue(node()) }}</span>
-        }
-        @default {
-          <span class="json-node-value json-node-value--{{ node().type }}">{{ formatValue(node()) }}</span>
-        }
-      }
-    </span>
-  </div>
+<div class="json-node json-node--primitive" [style.--depth]="node().depth">
+  <span class="json-node-line">
+    <span class="json-node-toggle-spacer" aria-hidden="true"></span>
+    @if (node().key !== null) {
+    <span class="json-node-key">"{{ node().key }}"</span>
+    <span class="json-node-colon">: </span>
+    }
+    @switch (valueView().kind) {
+    @case ('url') {
+    <a [href]="safeUrl(urlHref(valueView()))" target="_blank" rel="noopener noreferrer"
+      class="json-node-value json-node-value--url">{{ urlHref(valueView()) }}</a>
+    }
+    @case ('date') {
+    <span class="json-node-value json-node-value--{{ node().type }}">{{ formattedValue() }}</span>
+    }
+    @default {
+    <span class="json-node-value json-node-value--{{ node().type }}">{{ formattedValue() }}</span>
+    }
+    }
+  </span>
+</div>
 }
