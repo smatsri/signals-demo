@@ -1,13 +1,7 @@
 @if (invalidError()) {
-  <p class="json-viewer-error" role="alert">{{ invalidError() }}</p>
+<p class="json-viewer-error" role="alert">{{ invalidError() }}</p>
 } @else if (rootNode()) {
-  <div class="json-viewer-tree">
-    <app-json-node
-      [node]="rootNode()!"
-      [path]="''"
-      [depth]="0"
-      [collapsedPaths]="collapsedPaths"
-      [toggle]="toggle.bind(this)"
-    />
-  </div>
+<div class="json-viewer-tree">
+  <app-json-node [node]="rootNode()!" [collapsedPaths]="collapsedPaths" [toggle]="toggle.bind(this)" />
+</div>
 }

@@ -19,8 +19,6 @@ import type { JsonValueView, TreeNode } from './json-viewer.model';
 export class JsonNodeComponent {
   private readonly sanitizer = inject(DomSanitizer);
   readonly node = input.required<TreeNode>();
-  readonly path = input.required<string>();
-  readonly depth = input<number>(0);
   readonly collapsedPaths = input.required<Signal<Set<string>>>();
   readonly toggle = input.required<(path: string) => void>();
 
@@ -29,7 +27,7 @@ export class JsonNodeComponent {
   );
 
   readonly isCollapsed = computed(() => {
-    const p = this.path();
+    const p = this.node().path;
     if (p === '') return false;
     return this.collapsedPaths()().has(p);
   });
@@ -64,9 +62,4 @@ export class JsonNodeComponent {
     return view.kind === 'url' ? view.href : '';
   }
 
-  protected childPath(child: TreeNode): string {
-    const p = this.path();
-    const key = child.key ?? '';
-    return p === '' ? String(key) : `${p}.${key}`;
-  }
 }
