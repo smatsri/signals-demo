@@ -1,4 +1,4 @@
-@if (isExpandable(node())) {
+@if (isExpandable()) {
   <div class="json-node json-node--expandable" [style.--depth]="depth()">
     <span class="json-node-line">
       @if (path() !== '') {
@@ -6,10 +6,10 @@
           type="button"
           class="json-node-toggle"
           (click)="toggle()(path())"
-          [attr.aria-label]="isCollapsed(path()) ? 'Expand' : 'Collapse'"
-          [attr.aria-expanded]="!isCollapsed(path())"
+          [attr.aria-label]="isCollapsed() ? 'Expand' : 'Collapse'"
+          [attr.aria-expanded]="!isCollapsed()"
         >
-          {{ isCollapsed(path()) ? '+' : '−' }}
+          {{ isCollapsed() ? '+' : '−' }}
         </button>
       } @else {
         <span class="json-node-toggle-spacer" aria-hidden="true"></span>
@@ -19,14 +19,13 @@
         <span class="json-node-colon">: </span>
       }
       <span class="json-node-bracket">{{ node().type === 'object' ? '{' : '[' }}</span>
-      @if (isCollapsed(path())) {
+      @if (isCollapsed()) {
         <span class="json-node-ellipsis">{{ node().type === 'object' ? '…}' : '…]' }}</span>
       }
     </span>
-    @if (!isCollapsed(path())) {
-      @let children = getChildren(node());
+    @if (!isCollapsed()) {
       <div class="json-node-children">
-        @for (child of children; track childPath(child)) {
+        @for (child of children(); track childPath(child)) {
           <app-json-node
             [node]="child"
             [path]="childPath(child)"
@@ -50,21 +49,20 @@
         <span class="json-node-key">"{{ node().key }}"</span>
         <span class="json-node-colon">: </span>
       }
-      @let valueView = getValueView(node());
-      @switch (valueView.kind) {
+      @switch (valueView().kind) {
         @case ('url') {
           <a
-            [href]="safeUrl(valueView.href)"
+            [href]="safeUrl(urlHref(valueView()))"
             target="_blank"
             rel="noopener noreferrer"
             class="json-node-value json-node-value--url"
-          >{{ valueView.href }}</a>
+          >{{ urlHref(valueView()) }}</a>
         }
         @case ('date') {
-          <span class="json-node-value json-node-value--{{ node().type }}">{{ formatValue(node()) }}</span>
+          <span class="json-node-value json-node-value--{{ node().type }}">{{ formattedValue() }}</span>
         }
         @default {
-          <span class="json-node-value json-node-value--{{ node().type }}">{{ formatValue(node()) }}</span>
+          <span class="json-node-value json-node-value--{{ node().type }}">{{ formattedValue() }}</span>
         }
       }
     </span>

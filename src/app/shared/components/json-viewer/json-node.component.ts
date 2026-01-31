@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   forwardRef,
   inject,
   input,
@@ -24,47 +25,49 @@ export class JsonNodeComponent {
   readonly collapsedPaths = input.required<Signal<Set<string>>>();
   readonly toggle = input.required<(path: string) => void>();
 
+  readonly isExpandable = computed(
+    () => this.node().type === 'object' || this.node().type === 'array'
+  );
+
+  readonly isCollapsed = computed(() => {
+    const p = this.path();
+    if (p === '') return false;
+    return this.collapsedPaths()().has(p);
+  });
+
+  readonly children = computed(() => {
+    const n = this.node();
+    return n.type === 'object' || n.type === 'array' ? n.children : [];
+  });
+
+  readonly valueView = computed((): JsonValueView => {
+    const n = this.node();
+    if (n.type === 'object' || n.type === 'array') {
+      return { kind: 'default' };
+    }
+    const v = (n as Extract<TreeNode, { valueView: JsonValueView }>).valueView;
+    return v ?? { kind: 'default' };
+  });
+
+  readonly formattedValue = computed(() => {
+    const n = this.node();
+    if (n.type === 'string') return `"${n.value}"`;
+    if (n.type === 'number' || n.type === 'boolean') return String(n.value);
+    if (n.type === 'null') return 'null';
+    return '';
+  });
+
   protected safeUrl(href: string) {
     return this.sanitizer.bypassSecurityTrustUrl(href);
+  }
+
+  protected urlHref(view: JsonValueView): string {
+    return view.kind === 'url' ? view.href : '';
   }
 
   protected childPath(child: TreeNode): string {
     const p = this.path();
     const key = child.key ?? '';
     return p === '' ? String(key) : `${p}.${key}`;
-  }
-
-  protected isCollapsed(path: string): boolean {
-    if (path === '') return false;
-    return this.collapsedPaths()().has(path);
-  }
-
-  protected isExpandable(node: TreeNode): node is TreeNode & { type: 'object' | 'array'; children: TreeNode[] } {
-    return node.type === 'object' || node.type === 'array';
-  }
-
-  protected getChildren(node: TreeNode): TreeNode[] {
-    return node.type === 'object' || node.type === 'array' ? node.children : [];
-  }
-
-  protected getValueView(node: TreeNode): JsonValueView {
-    if (node.type === 'object' || node.type === 'array') {
-      return { kind: 'default' };
-    }
-    const valueView = (node as Extract<TreeNode, { valueView: JsonValueView }>).valueView;
-    return valueView ?? { kind: 'default' };
-  }
-
-  protected formatValue(node: TreeNode): string {
-    if (node.type === 'string') {
-      return `"${node.value}"`;
-    }
-    if (node.type === 'number' || node.type === 'boolean') {
-      return String(node.value);
-    }
-    if (node.type === 'null') {
-      return 'null';
-    }
-    return '';
   }
 }
