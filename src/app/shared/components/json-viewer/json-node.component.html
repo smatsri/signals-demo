@@ -1,0 +1,57 @@
+@if (isExpandable(node())) {
+  <div class="json-node json-node--expandable" [style.--depth]="depth()">
+    <span class="json-node-line">
+      @if (path() !== '') {
+        <button
+          type="button"
+          class="json-node-toggle"
+          (click)="toggle()(path())"
+          [attr.aria-label]="isCollapsed(path()) ? 'Expand' : 'Collapse'"
+          [attr.aria-expanded]="!isCollapsed(path())"
+        >
+          {{ isCollapsed(path()) ? '+' : '−' }}
+        </button>
+      } @else {
+        <span class="json-node-toggle-spacer" aria-hidden="true"></span>
+      }
+      @if (node().key !== null) {
+        <span class="json-node-key">"{{ node().key }}"</span>
+        <span class="json-node-colon">: </span>
+      }
+      <span class="json-node-bracket">{{ node().type === 'object' ? '{' : '[' }}</span>
+      @if (isCollapsed(path())) {
+        <span class="json-node-ellipsis">{{ node().type === 'object' ? '…}' : '…]' }}</span>
+      }
+    </span>
+    @if (!isCollapsed(path())) {
+      <div class="json-node-children">
+        @for (child of getChildren(node()); track childPath(child)) {
+          <app-json-node
+            [node]="child"
+            [path]="childPath(child)"
+            [depth]="depth() + 1"
+            [collapsedPaths]="collapsedPaths()"
+            [toggle]="toggle()"
+          />
+        }
+      </div>
+      @if (getChildren(node()).length > 0) {
+        <span class="json-node-line json-node-closing" [style.--depth]="depth()">
+          <span class="json-node-toggle-spacer" aria-hidden="true"></span>
+          <span class="json-node-bracket">{{ node().type === 'object' ? '}' : ']' }}</span>
+        </span>
+      }
+    }
+  </div>
+} @else {
+  <div class="json-node json-node--primitive" [style.--depth]="depth()">
+    <span class="json-node-line">
+      <span class="json-node-toggle-spacer" aria-hidden="true"></span>
+      @if (node().key !== null) {
+        <span class="json-node-key">"{{ node().key }}"</span>
+        <span class="json-node-colon">: </span>
+      }
+      <span class="json-node-value json-node-value--{{ node().type }}">{{ formatValue(node()) }}</span>
+    </span>
+  </div>
+}

@@ -38,4 +38,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/teams/team.page').then((m) => m.TeamPage),
   },
+  {
+    path: 'json-viewer',
+    loadComponent: () =>
+      import('./features/json-viewer/json-viewer.page').then(
+        (m) => m.JsonViewerPage
+      ),
+  },
 ];

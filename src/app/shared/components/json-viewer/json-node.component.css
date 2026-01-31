@@ -1,0 +1,84 @@
+.json-node {
+  --indent: 1.25rem;
+}
+
+.json-node-line {
+  display: block;
+  padding-left: calc(var(--depth, 0) * var(--indent));
+  font-family: ui-monospace, monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.json-node-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--app-text-muted);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.json-node-toggle-spacer {
+  display: inline-block;
+  width: 1.5rem;
+  min-width: 1.5rem;
+  height: 1.25rem;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.json-node-toggle:hover {
+  background: var(--app-nav-bg);
+  color: var(--app-text);
+}
+
+.json-node-key {
+  color: var(--app-accent);
+}
+
+.json-node-colon {
+  color: var(--app-text-muted);
+}
+
+.json-node-value--string {
+  color: #0d9488;
+}
+
+.json-node-value--number {
+  color: #7c3aed;
+}
+
+.json-node-value--boolean {
+  color: #c2410c;
+}
+
+.json-node-value--null {
+  color: var(--app-text-muted);
+}
+
+.json-node-bracket {
+  color: var(--app-text);
+}
+
+.json-node-ellipsis {
+  color: var(--app-text-muted);
+}
+
+.json-node-children {
+  display: block;
+}
+
+.json-node-closing {
+  padding-left: calc(var(--depth, 0) * var(--indent));
+}
