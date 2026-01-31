@@ -1,0 +1,41 @@
+<main class="greeter-page">
+  <section class="greeter-demo">
+    <header class="greeter-header">
+      <h1>input() / computed() in a dumb component</h1>
+      <p>
+        Parent passes signals into the card via <code>input()</code>;
+        the card derives <code>greeting()</code> with <code>computed()</code>
+        and emits <code>wave</code> via <code>output()</code>.
+      </p>
+    </header>
+
+    <div class="greeter-controls">
+      <label class="greeter-label">
+        Name
+        <input
+          type="text"
+          [ngModel]="selectedName()"
+          (ngModelChange)="selectedName.set($event)"
+          class="greeter-input"
+          placeholder="Your name"
+        />
+      </label>
+      <label class="greeter-label">
+        Title
+        <input
+          type="text"
+          [ngModel]="title()"
+          (ngModelChange)="title.set($event)"
+          class="greeter-input"
+          placeholder="Hello"
+        />
+      </label>
+    </div>
+
+    <app-greeter-card
+      [name]="selectedName()"
+      [title]="title()"
+      (wave)="onWave()"
+    />
+  </section>
+</main>

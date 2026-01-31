@@ -1,0 +1,22 @@
+<main class="json-viewer-page">
+  <section class="json-viewer-card">
+    <header class="json-viewer-header">
+      <h1>JSON viewer</h1>
+      <p>Paste or type JSON below. Invalid input shows an error; valid JSON is displayed as a collapsible tree.</p>
+    </header>
+    <div class="json-viewer-input-wrap">
+      <label for="json-input" class="json-viewer-label">JSON string</label>
+      <textarea
+        id="json-input"
+        class="json-viewer-textarea"
+        [value]="jsonInput()"
+        (input)="jsonInput.set($any($event.target).value)"
+        placeholder='e.g. { "name": "world", "count": 42 }'
+        rows="6"
+      ></textarea>
+    </div>
+    <div class="json-viewer-output">
+      <app-json-viewer [jsonString]="jsonInput()" />
+    </div>
+  </section>
+</main>

@@ -19,6 +19,11 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'greeter',
+    loadComponent: () =>
+      import('./features/greeter/greeter.page').then((m) => m.GreeterPage),
+  },
+  {
     path: 'contact',
     loadComponent: () =>
       import('./features/contact/contact.page').then((m) => m.ContactPage),
@@ -32,5 +37,12 @@ export const routes: Routes = [
     path: 'teams/:id',
     loadComponent: () =>
       import('./features/teams/team.page').then((m) => m.TeamPage),
+  },
+  {
+    path: 'json-viewer',
+    loadComponent: () =>
+      import('./features/json-viewer/json-viewer.page').then(
+        (m) => m.JsonViewerPage
+      ),
   },
 ];
